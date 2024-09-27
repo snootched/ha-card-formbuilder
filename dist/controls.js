@@ -5,7 +5,7 @@ exports.deepMerge = deepMerge;
 exports.isObject = isObject;
 exports.generateControl = generateControl;
 const lit_1 = require("lit");
-const unsafe_html_1 = require("lit/directives/unsafe-html");
+const unsafe_html_js_1 = require("lit/directives/unsafe-html.js");
 const getNestedProperty = (obj, path) => {
     return path.split(".").reduce((acc, part) => acc && acc[part], obj);
 };
@@ -112,7 +112,7 @@ function generateControl(control, card) {
         case 'RawHTML':
             return (0, lit_1.html) `
                 <div class="form-control">
-                    ${(0, unsafe_html_1.unsafeHTML)(control.html || "")}
+                    ${(0, unsafe_html_js_1.unsafeHTML)(control.html || "")}
                 </div>
             `;
         default:
