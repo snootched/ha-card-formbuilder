@@ -1,10 +1,3 @@
----
-# *Modified for YAML*
-Modified version for yaml-based cards.
-
----
----
-
 <p align="left">
   <img src="https://img.shields.io/github/v/release/snootched/ha-card-formbuilder?display_name=release&logo=startrek&color=37a6d1" alt="release">
   <img src="https://img.shields.io/badge/license-MIT-37a6d1?logo=opensourceinitiative&logoColor=white" alt="license">
@@ -14,7 +7,7 @@ Modified version for yaml-based cards.
 
 # Card Editor Form Builder for Home Assistant
 
-An adaption of the original [`ha-editor-formbuilder`](https://github.com/marcokreeft87/ha-editor-formbuilder) - with a focus on supporting YAML configuration, support for the Lovelace `ha-selector` controls, conditional expresssion evaluation, and more.
+An reimplementation of the original [`ha-editor-formbuilder (by marcokreeft87)`](https://github.com/marcokreeft87/ha-editor-formbuilder) - with a focus on supporting extensive YAML configurations, focus on controls implemented with `ha-selector`, conditional expresssion evaluation, and more.
 
 <br>
 

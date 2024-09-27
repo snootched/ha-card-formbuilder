@@ -1,6 +1,6 @@
 import { html } from "lit";
-import EditorForm from "../index";
-import { AnyControl } from "../interfaces";
+import EditorForm from "./index";
+import { AnyControl } from "./interfaces";
 
 
 export const getNestedProperty = (obj: any, path: string): any => {

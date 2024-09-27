@@ -82,49 +82,9 @@ export interface Section {
     selector?: any;
   }
 
-/*
-export interface TextboxControl extends Control {
-    type: 'Textbox';
-  }
-
-export interface DropdownControl extends Control {
-    type: 'Dropdown';
-  }
-
-export interface CheckboxesControl extends Control {
-    type: 'Checkboxes';
-  }
-
-export interface EntityDropdownControl extends Control {
-    type: 'EntityDropdown';
-  }
-
-export interface SliderControl extends Control {
-    type: 'Slider';
-    min: number;
-    max: number;
-    step?: number;
-  }
-
-export interface SwitchControl extends Control {
-    type: 'Switch';
-  }
-
-export interface ColorPickerControl extends Control {
-    type: 'ColorPicker';
-    mode?: string;
-  }
-*/
-
 export type AnyControl =
     | Control
     | Section;
-//    | TextboxControl
-//    | DropdownControl
-//    | CheckboxesControl
-//    | EntityDropdownControl
-//    | SliderControl
-//    | SwitchControl
 
 export function isSection(row: ControlRow | Section): row is Section {
     return row.type === 'Section';

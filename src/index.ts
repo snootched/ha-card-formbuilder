@@ -2,7 +2,7 @@ import { HomeAssistant, LovelaceCardConfig, fireEvent } from "custom-card-helper
 import { LitElement, CSSResult, css, html } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { ValueChangedEvent, HAInputElement, ControlRow, Section, isSection} from "./interfaces";
-import { generateControl, deepMerge } from "./utils/controls";
+import { generateControl, deepMerge } from "./controls";
 
 
 export default class EditorForm extends LitElement {
@@ -104,16 +104,6 @@ export default class EditorForm extends LitElement {
         }
     }
 
-    /*
-    private _evaluateCondition(condition: string): boolean {
-        try {
-            return new Function('return ' + condition).call(this);
-        } catch (e) {
-            console.error('Error evaluating condition:', condition, e);
-            return false;
-        }
-    }
-    */
     _valueChanged(ev: ValueChangedEvent): void {
         if (!this._config || !this._hass) {
             return;
