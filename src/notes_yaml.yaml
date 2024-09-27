@@ -1,0 +1,70 @@
+////sample yaml
+
+cb-lcars-base-card:
+  render_form:
+    - controls:
+      - label: "Base Label Test"
+        configValue: "label"
+        type: !FormControlType Textbox
+    - section:
+      label: "Advanced Settings"
+      outlined: true
+      leftChevron: true
+      controls:
+        - label: "Dropdown Example"
+          configValue: "dropdownValue"
+          type: !FormControlType Dropdown
+          items:
+            - value: "option1"
+              label: "Option 1"
+            - value: "option2"
+              label: "Option 2"
+        - label: "Checkboxes Example"
+          configValue: "checkboxesValue"
+          type: !FormControlType Checkboxes
+          items:
+            - value: "checkbox1"
+              label: "Checkbox 1"
+            - value: "checkbox2"
+              label: "Checkbox 2"
+        - label: "Entity Dropdown Example"
+          configValue: "entityValue"
+          type: !FormControlType EntityDropdown
+          domain: light
+        - label: "Slider Example"
+          configValue: "sliderValue"
+          type: !FormControlType Slider
+          min: 0
+          max: 100
+          step: 10
+          helper: "Adjust the slider value"
+        - label: "Switch Example"
+          configValue: "switchValue"
+          type: !FormControlType Switch
+        - label: "Color Picker Example"
+          configValue: "colorValue"
+          type: !FormControlType ColorPicker
+
+
+
+
+
+
+
+
+
+/////////////
+cb-lcars-base-card:
+  render_form:
+    - section:
+      label: "Advanced Settings"
+      controls:
+        - label: "Option 1"
+          configValue: "option1Value"
+          type: !FormControlType Dropdown
+          # ...
+      controls:
+        - label: "Option 2"
+          configValue: "option2Value"
+          type: !FormControlType Checkboxes
+          # ...
