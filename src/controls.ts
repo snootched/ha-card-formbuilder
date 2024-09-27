@@ -1,6 +1,7 @@
 import { html } from "lit";
 import EditorForm from "./index";
 import { AnyControl } from "./interfaces";
+import { unsafeHTML } from "lit/directives/unsafe-html";
 
 
 export const getNestedProperty = (obj: any, path: string): any => {
@@ -80,7 +81,7 @@ export function generateControl(control: AnyControl, card: EditorForm){
                   })()
 
   */
-    if (control.selector && control.selector.select && control.selector.select.optionsCondition) {
+    if ('selector' in control && control.selector && control.selector.select && control.selector.select.optionsCondition) {
         const options = card._evaluateCondition(control.selector.select.optionsCondition, context);
         control.selector.select.options = options;
     }
@@ -109,6 +110,22 @@ export function generateControl(control: AnyControl, card: EditorForm){
 
         case 'Divider':
             return html`<hr>`;
+
+        case 'Message':
+            return html`
+                <div class="form-control">
+                    <ha-alert alert-type=${control.alertType || "info"} title=${control.title || ""}>
+                        ${control.message || ""}
+                    </ha-alert>
+                </div>
+            `;
+
+        case 'RawHTML':
+            return html`
+                <div class="form-control">
+                    ${unsafeHTML(control.html || "")}
+                </div>
+            `;
 
         default:
             return html`
