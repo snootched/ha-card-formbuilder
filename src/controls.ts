@@ -1,7 +1,7 @@
 import { html } from "lit";
 import EditorForm from "./index";
 import { AnyControl } from "./interfaces";
-import { unsafeHTML } from "lit/directives/unsafe-html";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
 
 export const getNestedProperty = (obj: any, path: string): any => {
