@@ -5,6 +5,7 @@ exports.deepMerge = deepMerge;
 exports.isObject = isObject;
 exports.generateControl = generateControl;
 const lit_1 = require("lit");
+const unsafe_html_1 = require("lit/directives/unsafe-html");
 const getNestedProperty = (obj, path) => {
     return path.split(".").reduce((acc, part) => acc && acc[part], obj);
 };
@@ -75,7 +76,7 @@ function generateControl(control, card) {
                     })()
   
     */
-    if (control.selector && control.selector.select && control.selector.select.optionsCondition) {
+    if ('selector' in control && control.selector && control.selector.select && control.selector.select.optionsCondition) {
         const options = card._evaluateCondition(control.selector.select.optionsCondition, context);
         control.selector.select.options = options;
     }
@@ -100,6 +101,20 @@ function generateControl(control, card) {
             return (0, lit_1.html) `<div class="form-control"></div>`;
         case 'Divider':
             return (0, lit_1.html) `<hr>`;
+        case 'Message':
+            return (0, lit_1.html) `
+                <div class="form-control">
+                    <ha-alert alert-type=${control.alertType || "info"} title=${control.title || ""}>
+                        ${control.message || ""}
+                    </ha-alert>
+                </div>
+            `;
+        case 'RawHTML':
+            return (0, lit_1.html) `
+                <div class="form-control">
+                    ${(0, unsafe_html_1.unsafeHTML)(control.html || "")}
+                </div>
+            `;
         default:
             return (0, lit_1.html) `
                 <div class="form-control">

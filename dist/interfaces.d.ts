@@ -4,10 +4,6 @@ export interface HAInputElement extends HTMLElement {
     configValue: string;
     __checked?: boolean;
 }
-export interface DropdownOption {
-    label: string | undefined;
-    value: string;
-}
 export interface ValueChangedEvent {
     detail: {
         value: {
@@ -28,6 +24,17 @@ export interface Control {
     type: string;
     label: string;
     configValue: string;
+    helper?: string;
+    cssClass?: string;
+    disabled?: boolean;
+    required?: boolean;
+    visibilityCondition?: any;
+    disabledCondition?: any;
+    requiredCondition?: any;
+}
+export interface SelectorControl extends Control {
+    type: 'Selector';
+    selector: any;
     items?: {
         value: string;
         label: string;
@@ -35,29 +42,35 @@ export interface Control {
     min?: number;
     max?: number;
     step?: number;
-    helper?: string;
-    mode?: string;
-    controls?: Control[];
-    cssClass?: string;
     domain?: string;
-    disabled?: boolean;
-    outlined?: boolean;
-    leftChevron?: boolean;
-    schema?: any;
-    selector?: any;
-    required?: boolean;
-    visibilityCondition?: any;
-    disabledCondition?: any;
-    requiredCondition?: any;
+    mode?: string;
+}
+export interface MessageControl extends Control {
+    type: 'Message';
+    alertType: string;
+    title: string;
+    message: string;
+}
+export interface RawHTMLControl extends Control {
+    type: 'RawHTML';
+    html: string;
+}
+export interface DividerControl extends Control {
+    type: 'Divider';
+}
+export interface FillerControl extends Control {
+    type: 'Filler';
 }
 export interface ControlRow {
     label?: string;
     type?: string;
-    controls: Control[];
+    controls: AnyControl[];
     rows?: ControlRow[];
     cssClass?: string;
     hidden?: boolean;
     visibilityCondition?: any;
+    disabledCondition?: any;
+    requiredCondition?: any;
 }
 export interface Section {
     label?: string;
@@ -67,7 +80,7 @@ export interface Section {
     leftChevron?: boolean;
     expanded?: boolean;
     noCollapse?: boolean;
-    controls: Control[];
+    controls: AnyControl[];
     rows?: ControlRow[];
     cssClass?: string;
     headerLevel?: number;
@@ -78,6 +91,6 @@ export interface Section {
     required?: boolean;
     selector?: any;
 }
-export type AnyControl = Control | Section;
+export type AnyControl = Section | SelectorControl | MessageControl | RawHTMLControl | DividerControl | FillerControl;
 export declare function isSection(row: ControlRow | Section): row is Section;
 export declare function isControlRow(row: ControlRow | Section): row is ControlRow;
