@@ -4,7 +4,7 @@ const custom_card_helpers_1 = require("custom-card-helpers");
 const lit_1 = require("lit");
 const unsafe_html_js_1 = require("lit/directives/unsafe-html.js");
 const interfaces_1 = require("./interfaces");
-const controls_1 = require("./utils/controls");
+const controls_1 = require("./controls");
 class EditorForm extends lit_1.LitElement {
     constructor() {
         super(...arguments);
@@ -93,16 +93,6 @@ class EditorForm extends lit_1.LitElement {
             return false;
         }
     }
-    /*
-    private _evaluateCondition(condition: string): boolean {
-        try {
-            return new Function('return ' + condition).call(this);
-        } catch (e) {
-            console.error('Error evaluating condition:', condition, e);
-            return false;
-        }
-    }
-    */
     _valueChanged(ev) {
         var _a, _b;
         if (!this._config || !this._hass) {
