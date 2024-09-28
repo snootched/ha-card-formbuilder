@@ -5,33 +5,76 @@
 <p>
 
 
+
 # Card Editor Form Builder for Home Assistant
 
-An reimplementation of the original [`ha-editor-formbuilder (by marcokreeft87)`](https://github.com/marcokreeft87/ha-editor-formbuilder) - with a focus on supporting extensive YAML configurations, focus on controls implemented with `ha-selector`, conditional expresssion evaluation, and more.
+An reimplementation of the original [`ha-editor-formbuilder (by marcokreeft87)`](https://github.com/marcokreeft87/ha-editor-formbuilder) - with a focus on supporting extensive YAML configurations, controls backed by `ha-selector`, conditional expresssion evaluation, and more.
+
+<br>
+<div class="carousel">
+  <div class="carousel-inner">
+    <img src="images/lookfeel.png" alt="Image 1">
+    <img src="images/text.png" alt="Image 2">
+    <img src="images/actions.png" alt="Image 3">
+    <img src="images/example_advanced.jpg" alt="Image 4">
+    <img src="images/lookfeel.png" alt="Image 1">
+    <img src="images/text.png" alt="Image 2">
+    <img src="images/actions.png" alt="Image 3">
+    <img src="images/example_advanced.jpg" alt="Image 4">
+  </div>
+</div>
+
+<style>
+.carousel {
+  width: 700px;
+  height: 550px;
+  overflow: hidden;
+  position: relative;
+}
+
+.carousel-inner {
+  display: flex;
+  width: 650%;
+  animation: slide 25s infinite linear;
+}
+
+.carousel-inner img {
+  width: 12.5%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes slide {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+
+}
+</style>
 
 <br>
 
 - [Card Editor Form Builder for Home Assistant](#card-editor-form-builder-for-home-assistant)
   - [Overview](#overview)
 - [Usage](#usage)
+  - [Installation](#installation)
   - [Basic Configuration](#basic-configuration)
     - [Extending and Implementing the Editor Class](#extending-and-implementing-the-editor-class)
   - [Form Configuration Structure](#form-configuration-structure)
     - [YAML Structure](#yaml-structure)
-    - [Sections](#sections)
-    - [Section Type Options](#section-type-options)
-      - [Rows](#rows)
-  - [Control Rows](#control-rows)
-    - [ControlRow Type Options](#controlrow-type-options)
+    - [Rows](#rows)
+    - [Sections \[`ha-expansion-panel`\]](#sections-ha-expansion-panel)
+      - [Section Type Options](#section-type-options)
+    - [Control Rows](#control-rows)
+      - [ControlRow Type Options](#controlrow-type-options)
     - [Controls](#controls)
       - [Control Types](#control-types)
       - [Control - Common Options](#control---common-options)
-    - [Condition Options](#condition-options)
-      - [Parameters](#parameters)
-      - [Examples](#examples)
-        - [visibilityCondition](#visibilitycondition)
-        - [disabledCondition](#disabledcondition)
-  - [`selector: select` - Dynamic Options List](#selector-select---dynamic-options-list)
+  - [Conditions](#conditions)
+    - [Condition Types](#condition-types)
+    - [Examples](#examples)
+      - [visibilityCondition](#visibilitycondition)
+      - [disabledCondition](#disabledcondition)
+      - [optionsCondition \[Dynamic Options list for `selector: select`\]](#optionscondition-dynamic-options-list-for-selector-select)
   - [Examples](#examples-1)
   - [`ha-selector` Control Reference](#ha-selector-control-reference)
     - [Common Parameters](#common-parameters)
@@ -55,14 +98,23 @@ This form builder can be integrated into your custom card projects, allowing you
 
 # Usage
 
+## Installation
+
+To use the Card Editor Form Builder, first install the module into your project:
+
+```shell
+npm install 'ha-card-formbuilder@git+https://github.com/snootched/ha-card-formbuilder' --save
+```
+
 ## Basic Configuration
 
-To use the Card Editor Form Builder, import the module into your project and extend the Editor class.
+You will import the `Editor` class into your project and extend it for use.
+
 You can define your form configurations within your code if preferred, but importing from a YAML file provides quick edit capabilities and is the primary use-case.
 
 ### Extending and Implementing the Editor Class
 
-To extend and implement the Editor class, follow these steps:
+To extend and implement the Editor class:
 
 1. **Import the Editor Class**: Import the base Editor class from the module.
 
@@ -70,7 +122,7 @@ To extend and implement the Editor class, follow these steps:
 
 3. **Implement Required Methods**: Implement the required methods such as `render`.
 
-4. **Locad Configuration and Rendering**: Load your form configuration (from YAML or js variable) and call the `generateForm(formContent)` method from `render()`
+4. **Load Configuration for Rendering**: Load your form configuration (from YAML or js variable) and call the `generateForm(formContent)` method from `render()`
 
 Here is an example of how to extend and implement the Editor class:
 
@@ -79,6 +131,16 @@ import { Editor } from 'path-to-editor-module';
 import { html } from 'lit';
 
 class CustomCardEditor extends Editor {
+
+    _formControls;
+
+    constructor(cardType) {
+        super();
+
+        // load the configuration from your yaml file with your preferred method of doing so
+        this._formControls = {};
+        this._formControls = myYamlLoader('myYamlFile');
+    }
 
     render() {
         if (!this._hass) {
@@ -171,11 +233,32 @@ If you have multiple cards to build editors for, you can create an array within 
             |
             +-- cssText
 ```
+### Rows
+A row is a container within a section that holds one or more control rows or sections. Rows can have properties such as `visibilityCondition` and `cssClass`.
 
-### Sections
-A section is a top-level container that groups related rows and controls. It can have properties such as `label`, `outlined`, `icon`, and more.
+```yaml
+rows:
+  - type: ControlRow
+    cssClass: "my-custom-css-class-in-cssText"
+    controls:
+      - ....control
+      - ....control
+  - type: ControlRow
+    cssClass: "form-row two-controls"
+    controls:
+      - ....control
+      - ....control
+  - type: Section
+    rows:
+      - type: ControlRow
+      .
+      .
 
-Sections can also be nested to form groupings of similar control items.
+```
+### Sections [`ha-expansion-panel`]
+A section is a top-level container that groups related rows and controls. It uses `ha-expansion-panel` and has properties such as `label`, `outlined`, `icon`, and more.
+
+Tip: Sections can also be nested to form groupings of similar control items into larger control groups.
 
 ```yaml
 - type: Section
@@ -202,7 +285,7 @@ Sections can also be nested to form groupings of similar control items.
                   label: "Option 2"
 ```
 
-### Section Type Options
+#### Section Type Options
 
 | Parameter             | Description                                                                 | Type    | Options | Required | Default Value |
 |-----------------------|-----------------------------------------------------------------------------|---------|---------|----------|---------------|
@@ -216,34 +299,13 @@ Sections can also be nested to form groupings of similar control items.
 | `visibilityCondition` | Condition to determine if the section is visible                            | String  | -       | No       | -             |
 | `rows`                | Array of rows (`Sections` or `ControlRows`)                                  | Array   | -       | Yes      | -             |                            | Array  | -       | Yes       |
 
-#### Rows
-A row is a container within a section that holds one or more controls. Rows can have properties such as `type` and `cssClass`.
 
-```yaml
-rows:
-  - type: ControlRow
-    cssClass: "my-custom-css-class-in-cssText"
-    controls:
-      - ....control
-      - ....control
-  - type: ControlRow
-    cssClass: "form-row two-controls"
-    controls:
-      - ....control
-      - ....control
-  - type: Section
-    rows:
-      - type: ControlRow
-      .
-      .
 
-```
-
-## Control Rows
+### Control Rows
 
 Control Rows are the rows in the form (or within Sections) that the controls are placed.
 
-### ControlRow Type Options
+#### ControlRow Type Options
 
 | Parameter   | Description                                      | Type    | Options | Required |
 |-------------|--------------------------------------------------|---------|---------|----------|
@@ -255,7 +317,7 @@ Control Rows are the rows in the form (or within Sections) that the controls are
 
 
 ### Controls
-Controls are the individual form elements within a row. Each control can have various properties such as label, helper, configValue, type, and more. The type property determines the specific control type.
+Controls are the individual form elements within a row. Each control can have various properties such as `label`, `helper`, `configValue`, `type`, and more. The `type` property determines the specific control type.
 
 #### Control Types
 
@@ -287,30 +349,30 @@ The following control types are supported:
 | Parameter     | Description                                                                 | Type    | Options | Default Value | Required |
 |---------------|-----------------------------------------------------------------------------|---------|---------|---------------|----------|
 | `type`        | The control type                                                            | String  |`Selector`<br>`Divider`<br>`Filler`<br>`Message`<br>`RawHTML` |-     | Yes      |
-| `configValue` | The configuration value path                                                | String  | -       | -             | Yes      |
+| `configValue` | The configuration value path the control is for.                                         | String  | -       | -             | Yes      |
 | `label`       | The label for the control                                                   | String  | -       | -             | No       |
 | `helper`      | Helper text for the control                                                 | String  | -       | -             | No       |
 | `disabled`    | Whether the control is disabled                                             | Boolean | -       | `false`       | No       |
 | `required`    | Whether the control is required                                             | Boolean | -       | `false`       | No       |
-| `selector`    | The specific selector definition                                            | Object  | -        | -             | Yes (`type: Selector`)     |
-| `visibilityCondition`,`disabledCondition`    | The specific selector definition                                            | Object  | -             | -      | No
+| `selector`    | The specific selector definition (see below)                                            | Object  | -        | -             | Yes (`type: Selector`)     |
+| `visibilityCondition`,`disabledCondition`    | Conditional expressions (see below)                                            | String  | -             | -      | No
 
 
-### Condition Options
+## Conditions
 
 The `visibilityCondition` and `disabledCondition` options allow you to dynamically control the visibility and enabled state of controls based on specific conditions. These conditions are evaluated as JavaScript expressions within the context of the form.
 You have access to the context including `this`, `hass`, and `window`.
 
-#### Parameters
+### Condition Types
 
 | Parameter            | Description                                                                 | Type    | Required |
 |----------------------|-----------------------------------------------------------------------------|---------|----------|
 | `visibilityCondition`| Condition to determine if the control is visible                            | String  | No       |
 | `disabledCondition`  | Condition to determine if the control is disabled                           | String  | No       |
 
-#### Examples
+### Examples
 
-##### visibilityCondition
+#### visibilityCondition
 
 The `visibilityCondition` option can be used to show or hide a control based on a specific condition. For example, you can show a control only if a certain configuration value is true.
 
@@ -327,7 +389,7 @@ The `visibilityCondition` option can be used to show or hide a control based on 
 In this example, the "Show Icon" control will only be visible if `someCondition` is true.
 
 
-##### disabledCondition
+#### disabledCondition
 
 The `disabledCondition` option can be used to enable or disable a control based on a specific condition. For example, you can disable a control if a certain configuration value is false.
 
@@ -350,9 +412,9 @@ The `disabledCondition` option can be used to enable or disable a control based 
 ```
 In this example, the "Background Color" control will be disabled if `someOtherCondition` is false.
 
-## `selector: select` - Dynamic Options List
+#### optionsCondition [Dynamic Options list for `selector: select`]
 
-You can dynamically generate options arrays for the `select` selector based on expressions. For example, you can list CSS variables that start with a specific prefix.
+You can dynamically generate options arrays for the `select` selector based on expressions. For example with access to our context, you can list CSS variables that start with a specific prefix.
 
 ```yaml
 - controls:
@@ -382,7 +444,7 @@ Basic Example
 Here is a basic example of a form configuration:
 
 ```yaml
-cb-lcars-base-card:
+my-card:
   render_form:
     - type: Section
       label: "Section 31"
@@ -414,11 +476,9 @@ cb-lcars-base-card:
 ```
 
 
-Example YAML Structure
-Here is a complete example of a YAML configuration that includes sections, rows, and controls:
 
 ```yaml
-cb-lcars-card:
+my-card:
   render_form:
     - type: Section
       label: "General Settings"
@@ -465,62 +525,7 @@ Advanced Example
 Here is an advanced example with dynamic options:
 
 ```yaml
-cb-lcars-multimeter-card:
-  render_form:
-    - type: Section
-      label: "Look & Feel"
-      outlined: true
-      leftChevron: false
-      headerLevel: 4
-      icon: "mdi:palette-advanced"
-      rows:
-        - controls:
-            - label: "Control Mode"
-              helper: "Choose the mode for the control panel"
-              configValue: "cblcars_card_config.variables.panel.mode"
-              required: true
-              type: Selector
-              selector:
-                select:
-                  options:
-                    - value: "gauge"
-                      label: "Gauge"
-                    - value: "slider"
-                      label: "Slider"
-            - label: "Choose Entity"
-              configValue: "cblcars_card_config.entity"
-              type: Selector
-              selector:
-                entity:
-        - type: ControlRow
-          cssClass: "form-row two-controls"
-          controls:
-            - label: "Options from Vars"
-              configValue: "cblcars_card_config.variables.card.background.color.default"
-              type: Selector
-              selector:
-                select:
-                  optionsCondition: |
-                    (() => {
-                      const styles = document.documentElement.style;
-                      const options = [];
-                      for (let i = 0; i < styles.length; i++) {
-                        const name = styles[i];
-                        if (name.startsWith('--picard-')) {
-                          const value = styles.getPropertyValue(name).trim();
-                          options.push({ value, label: name.replace('--', '') });
-                        }
-                      }
-                      return options;
-                    })()
-```
-
-
-Example YAML Structure
-Here is a complete example of a YAML configuration that includes sections, rows, and controls:
-
-```yaml
-cb-lcars-card:
+my-card:
   render_form:
     - type: Section
       label: "General Settings"
@@ -565,15 +570,122 @@ cb-lcars-card:
 ```
 
 
+```yaml
+my-card:
+  render_form:
+    - type: Section
+      label: "General Settings"
+      outlined: true
+      icon: "mdi:settings"
+      rows:
+        - type: ControlRow
+          cssClass: "form-row two-controls"
+          controls:
+            - label: "Entity"
+              helper: "Select the entity"
+              configValue: "entity"
+              type: Selector
+              selector:
+                entity:
+            - label: "Show Icon"
+              helper: "Toggle to show or hide the icon"
+              configValue: "show_icon"
+              type: Selector
+              selector:
+                boolean:
+        - type: ControlRow
+          cssClass: "form-row"
+          controls:
+            - label: "Background Color"
+              helper: "Select the background color"
+              configValue: "background_color"
+              type: Selector
+              selector:
+                select:
+                  optionsCondition: |
+                    (() => {
+                      const styles = document.documentElement.style;
+                      const options = [];
+                      for (let i = 0; i < styles.length; i++) {
+                        const name = styles[i];
+                        if (name.startsWith('--picard-')) {
+                          const value = styles.getPropertyValue(name).trim();
+                          options.push({ value, label: name.replace('--', '') });
+                        }
+                      }
+                      return options;
+                    })()
+        - type: ControlRow
+          cssClass: "form-row"
+          controls:
+            - label: "Show Message"
+              helper: "Toggle to show or hide the message"
+              configValue: "show_message"
+              type: Selector
+              selector:
+                boolean:
+        - type: ControlRow
+          cssClass: "form-row"
+          controls:
+            - type: Message
+              message: "This is a conditional message."
+              visibilityCondition: "this._config.show_message === true"
+        - type: ControlRow
+          cssClass: "form-row"
+          controls:
+            - type: RawHTML
+              html: "<p>This is a raw HTML block.</p>"
+    - type: Section
+      label: "Advanced Settings"
+      outlined: true
+      icon: "mdi:settings-outline"
+      rows:
+        - type: ControlRow
+          cssClass: "form-row"
+          controls:
+            - label: "Enable Feature"
+              helper: "Toggle to enable or disable the feature"
+              configValue: "enable_feature"
+              type: Selector
+              selector:
+                boolean:
+        - type: ControlRow
+          cssClass: "form-row"
+          controls:
+            - label: "Feature Options"
+              helper: "Select an option for the feature"
+              configValue: "feature_option"
+              type: Selector
+              selector:
+                select:
+                  options:
+                    - value: "option1"
+                      label: "Option 1"
+                    - value: "option2"
+                      label: "Option 2"
+                disabledCondition: "this._config.enable_feature !== true"
+        - type: Section
+          label: "Nested Section"
+          outlined: true
+          rows:
+            - type: ControlRow
+              cssClass: "form-row"
+              controls:
+                - label: "Nested Control"
+                  helper: "This is a nested control"
+                  configValue: "nested_control"
+                  type: Selector
+                  selector:
+                    select:
+                      options:
+                        - value: "nested1"
+                          label: "Nested 1"
+                        - value: "nested2"
+                          label: "Nested 2"
+```
+![example_advanced](images/example_advanced.jpg)
 
-
-
-
-
-
-
-
-
+<hr>
 
 ## `ha-selector` Control Reference
 
