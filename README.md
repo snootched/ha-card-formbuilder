@@ -264,6 +264,8 @@ The following control types are supported:
 - **`Selector`**: A dropdown or radio button selector.
 - **`Divider`**: A horizontal divider.
 - **`Filler`**: An empty filler control.
+- **`Message`**: An alert/message control [`ha-alert`]
+- **`RawHTML`**: Render a raw HTML string.
 
 ```yaml
 - type: Selector
@@ -282,16 +284,16 @@ The following control types are supported:
 
 #### Control - Common Options
 
-| Parameter     | Description                                                                 | Type    | Default Value | Required |
-|---------------|-----------------------------------------------------------------------------|---------|---------------|----------|
-| `type` | The control type                                               | String (`Selector`,`Divider`,`Filler`) | -             | Yes      |
-| `configValue` | The configuration value path                                                | String  | -             | Yes      |
-| `label`       | The label for the control                                                   | String  | -             | No       |
-| `helper`      | Helper text for the control                                                 | String  | -             | No       |
-| `disabled`    | Whether the control is disabled                                             | Boolean | `false`       | No       |
-| `required`    | Whether the control is required                                             | Boolean | `false`       | No       |
-| `selector`    | The specific selector definition                                            | Object  | -             | Yes (`type: Selector`)     |
-| `visibilityCondition`,`disabledCondition`    | The specific selector definition                                            | Object  | -             | Yes (`type: Selector`)     |
+| Parameter     | Description                                                                 | Type    | Options | Default Value | Required |
+|---------------|-----------------------------------------------------------------------------|---------|---------|---------------|----------|
+| `type`        | The control type                                                            | String  |`Selector`<br>`Divider`<br>`Filler`<br>`Message`<br>`RawHTML` |-     | Yes      |
+| `configValue` | The configuration value path                                                | String  | -       | -             | Yes      |
+| `label`       | The label for the control                                                   | String  | -       | -             | No       |
+| `helper`      | Helper text for the control                                                 | String  | -       | -             | No       |
+| `disabled`    | Whether the control is disabled                                             | Boolean | -       | `false`       | No       |
+| `required`    | Whether the control is required                                             | Boolean | -       | `false`       | No       |
+| `selector`    | The specific selector definition                                            | Object  | -        | -             | Yes (`type: Selector`)     |
+| `visibilityCondition`,`disabledCondition`    | The specific selector definition                                            | Object  | -             | -      | No
 
 
 ### Condition Options
