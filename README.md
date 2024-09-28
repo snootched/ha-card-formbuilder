@@ -11,45 +11,8 @@
 An reimplementation of the original [`ha-editor-formbuilder (by marcokreeft87)`](https://github.com/marcokreeft87/ha-editor-formbuilder) - with a focus on supporting extensive YAML configurations, controls backed by `ha-selector`, conditional expresssion evaluation, and more.
 
 <br>
-<div class="carousel">
-  <div class="carousel-inner">
-    <img src="images/lookfeel.png" alt="Image 1">
-    <img src="images/text.png" alt="Image 2">
-    <img src="images/actions.png" alt="Image 3">
-    <img src="images/example_advanced.jpg" alt="Image 4">
-    <img src="images/lookfeel.png" alt="Image 1">
-    <img src="images/text.png" alt="Image 2">
-    <img src="images/actions.png" alt="Image 3">
-    <img src="images/example_advanced.jpg" alt="Image 4">
-  </div>
-</div>
 
-<style>
-.carousel {
-  width: 700px;
-  height: 550px;
-  overflow: hidden;
-  position: relative;
-}
-
-.carousel-inner {
-  display: flex;
-  width: 650%;
-  animation: slide 25s infinite linear;
-}
-
-.carousel-inner img {
-  width: 12.5%;
-  height: 100%;
-  object-fit: cover;
-}
-
-@keyframes slide {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
-
-}
-</style>
+<img src="images/animated_samples.gif" alt="Examples">
 
 <br>
 
