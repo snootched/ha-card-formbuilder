@@ -116,11 +116,24 @@ function generateControl(control, card) {
                 </div>
             `;
         case 'ColorPreview':
-            const colorValue = (0, exports.getNestedProperty)(card._config, control.configValue);
+            let colorValue = (0, exports.getNestedProperty)(card._config, control.configValue);
             console.log('colorValue:', colorValue);
+            // Provide a default color value if colorValue is not set
+            if (!colorValue) {
+                colorValue = 'var(--default-color, #0000ff)'; // Default to a nice blue color
+            }
+            // Extract the CSS variable name from colorValue
+            const cssVariableNameMatch = colorValue.match(/var\((--[^,)]+)\)/);
+            const cssVariableName = cssVariableNameMatch ? cssVariableNameMatch[1] : colorValue;
+            console.log('cssVariableName:', cssVariableName);
             // Get the computed color value directly
-            const computedColorValue = getComputedStyle(document.documentElement).getPropertyValue(colorValue).trim();
+            let computedColorValue = getComputedStyle(document.documentElement).getPropertyValue(cssVariableName).trim();
             console.log('computedColorValue:', computedColorValue);
+            // Check if computedColorValue is empty and provide a fallback
+            if (!computedColorValue) {
+                console.warn(`CSS variable ${cssVariableName} is not defined. Using fallback color.`);
+                computedColorValue = '#0000ff'; // Fallback to a nice blue color
+            }
             // Function to convert RGB string to luminance
             const getLuminance = (rgb) => {
                 console.log('RGB input to getLuminance:', rgb);
