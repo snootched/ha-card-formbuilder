@@ -136,19 +136,25 @@ export function generateControl(control: AnyControl, card: EditorForm){
                 colorValue = 'var(--default-color, #0000ff)'; // Default to a nice blue color
             }
 
-            // Extract the CSS variable name from colorValue
-            const cssVariableNameMatch = colorValue.match(/var\((--[^,)]+)\)/);
-            const cssVariableName = cssVariableNameMatch ? cssVariableNameMatch[1] : colorValue;
-            console.log('cssVariableName:', cssVariableName);
+            // Check if colorValue is a CSS variable or a hex color
+            const isCssVariable = colorValue.startsWith('var(');
+            let computedColorValue = colorValue;
 
-            // Get the computed color value directly
-            let computedColorValue = getComputedStyle(document.documentElement).getPropertyValue(cssVariableName).trim();
-            console.log('computedColorValue:', computedColorValue);
+            if (isCssVariable) {
+                // Extract the CSS variable name from colorValue
+                const cssVariableNameMatch = colorValue.match(/var\((--[^,)]+)\)/);
+                const cssVariableName = cssVariableNameMatch ? cssVariableNameMatch[1] : colorValue;
+                console.log('cssVariableName:', cssVariableName);
 
-            // Check if computedColorValue is empty and provide a fallback
-            if (!computedColorValue) {
-                console.warn(`CSS variable ${cssVariableName} is not defined. Using fallback color.`);
-                computedColorValue = '#0000ff'; // Fallback to a nice blue color
+                // Get the computed color value directly
+                computedColorValue = getComputedStyle(document.documentElement).getPropertyValue(cssVariableName).trim();
+                console.log('computedColorValue:', computedColorValue);
+
+                // Check if computedColorValue is empty and provide a fallback
+                if (!computedColorValue) {
+                    console.warn(`CSS variable ${cssVariableName} is not defined. Using fallback color.`);
+                    computedColorValue = '#0000ff'; // Fallback to a nice blue color
+                }
             }
 
             // Function to convert RGB string to luminance
