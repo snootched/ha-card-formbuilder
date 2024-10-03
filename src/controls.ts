@@ -129,10 +129,28 @@ export function generateControl(control: AnyControl, card: EditorForm){
 
         case 'ColorPreview':
             const colorValue = getNestedProperty(card._config, control.configValue);
+
+            // Get the computed color value directly
+            const computedColorValue = getComputedStyle(document.documentElement).getPropertyValue(colorValue).trim();
+
+            // Function to convert RGB string to luminance
+            const getLuminance = (rgb) => {
+                const rgbValues = rgb.match(/\d+/g).map(Number);
+                const [r, g, b] = rgbValues.map(value => value / 255).map(value => {
+                    return value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
+                });
+                return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+            };
+
+            // Determine text color based on luminance
+            const luminance = getLuminance(computedColorValue);
+            const textColor = luminance > 0.5 ? '#000' : '#fff';
+
             return html`
-                <div class="form-control">
-                    <div style="width: 100px; height: 50px; background-color: ${colorValue}; border-radius: 25px; border: 1px solid #000; display: flex; align-items: center; justify-content: center; color: #fff;">
-                        ${colorValue}
+                <div class="form-control" style="width: 100%;">
+                    <div style="width: 100%; height: 60px; background-color: ${colorValue}; border-radius: 25px; border: 1px solid #000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: ${textColor}; padding: 5px;">
+                        <div>${colorValue}</div>
+                        <div>${computedColorValue}</div>
                     </div>
                 </div>
             `;
