@@ -67,6 +67,11 @@ export interface FillerControl extends Control {
   type: 'Filler';
 }
 
+export interface ColorPreviewControl extends Control {
+  type: 'ColorPreview';
+  configValue: string;
+}
+
 export interface ControlRow {
     label?: string;
     type?: string;
@@ -105,7 +110,8 @@ export type AnyControl =
     | MessageControl
     | RawHTMLControl
     | DividerControl
-    | FillerControl;
+    | FillerControl
+    | ColorPreviewControl;
 
 export function isSection(row: ControlRow | Section): row is Section {
     return row.type === 'Section';

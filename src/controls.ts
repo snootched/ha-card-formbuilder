@@ -127,6 +127,16 @@ export function generateControl(control: AnyControl, card: EditorForm){
                 </div>
             `;
 
+        case 'ColorPreview':
+            const colorValue = getNestedProperty(card._config, control.configValue);
+            return html`
+                <div class="form-control">
+                    <div style="width: 100px; height: 50px; background-color: ${colorValue}; border-radius: 25px; border: 1px solid #000; display: flex; align-items: center; justify-content: center; color: #fff;">
+                        ${colorValue}
+                    </div>
+                </div>
+            `;
+
         default:
             return html`
                 <div class="form-control">
