@@ -129,22 +129,29 @@ export function generateControl(control: AnyControl, card: EditorForm){
 
         case 'ColorPreview':
             const colorValue = getNestedProperty(card._config, control.configValue);
+            console.log('colorValue:', colorValue);
 
             // Get the computed color value directly
             const computedColorValue = getComputedStyle(document.documentElement).getPropertyValue(colorValue).trim();
+            console.log('computedColorValue:', computedColorValue);
 
             // Function to convert RGB string to luminance
             const getLuminance = (rgb) => {
+                console.log('RGB input to getLuminance:', rgb);
                 const rgbValues = rgb.match(/\d+/g).map(Number);
+                console.log('Parsed RGB values:', rgbValues);
                 const [r, g, b] = rgbValues.map(value => value / 255).map(value => {
                     return value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
                 });
+                console.log('Normalized RGB values:', [r, g, b]);
                 return 0.2126 * r + 0.7152 * g + 0.0722 * b;
             };
 
             // Determine text color based on luminance
             const luminance = getLuminance(computedColorValue);
+            console.log('Luminance:', luminance);
             const textColor = luminance > 0.5 ? '#000' : '#fff';
+            console.log('textColor:', textColor);
 
             return html`
                 <div class="form-control" style="width: 100%;">
