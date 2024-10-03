@@ -115,6 +115,15 @@ function generateControl(control, card) {
                     ${(0, unsafe_html_js_1.unsafeHTML)(control.html || "")}
                 </div>
             `;
+        case 'ColorPreview':
+            const colorValue = (0, exports.getNestedProperty)(card._config, control.configValue);
+            return (0, lit_1.html) `
+                <div class="form-control">
+                    <div style="width: 100px; height: 50px; background-color: ${colorValue}; border-radius: 25px; border: 1px solid #000; display: flex; align-items: center; justify-content: center; color: #fff;">
+                        ${colorValue}
+                    </div>
+                </div>
+            `;
         default:
             return (0, lit_1.html) `
                 <div class="form-control">
