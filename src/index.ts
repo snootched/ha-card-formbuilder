@@ -244,7 +244,7 @@ export default class EditorForm extends LitElement {
 
             /* ensure full width for form controls not in two-controls class */
             .form-row:not(.two-controls) .form-control > * {
-                width: 100%;
+                width: var(--webkit-fill-available);
             }
 
             /* Base styles for form controls */

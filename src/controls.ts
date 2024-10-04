@@ -126,7 +126,6 @@ export function generateControl(control: AnyControl, card: EditorForm){
                     ${unsafeHTML(control.html || "")}
                 </div>
             `;
-
         case 'ColorPreview':
             let colorValue = getNestedProperty(card._config, control.configValue);
             console.log('colorValue:', colorValue);
@@ -139,6 +138,7 @@ export function generateControl(control: AnyControl, card: EditorForm){
             // Check if colorValue is a CSS variable or a hex color
             const isCssVariable = colorValue.startsWith('var(');
             let computedColorValue = colorValue;
+            let displayText = colorValue;
 
             if (isCssVariable) {
                 // Extract the CSS variable name from colorValue
@@ -155,6 +155,8 @@ export function generateControl(control: AnyControl, card: EditorForm){
                     console.warn(`CSS variable ${cssVariableName} is not defined. Using fallback color.`);
                     computedColorValue = '#0000ff'; // Fallback to a nice blue color
                 }
+            } else {
+                displayText = 'User Defined Color';
             }
 
             // Function to convert RGB string to luminance
@@ -177,8 +179,8 @@ export function generateControl(control: AnyControl, card: EditorForm){
 
             return html`
                 <div class="form-control" style="width: 100%;">
-                    <div style="width: 100%; height: 60px; background-color: ${colorValue}; border-radius: 25px; border: 1px solid #000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: ${textColor}; padding: 5px;">
-                        <div>${colorValue}</div>
+                    <div style="width: 100%; height: 50px; background-color: ${colorValue}; border-radius: 25px; border: 1px solid #000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: ${textColor};">
+                        <div>${displayText}</div>
                         <div>${computedColorValue}</div>
                     </div>
                 </div>
