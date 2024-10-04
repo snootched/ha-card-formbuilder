@@ -143,16 +143,27 @@ function generateControl(control, card) {
             else {
                 displayText = 'User Defined Color';
             }
+            // Function to convert hex color to RGB
+            const hexToRgb = (hex) => {
+                // Remove the hash at the start if it's there
+                hex = hex.replace(/^#/, '');
+                // Parse the r, g, b values
+                let bigint = parseInt(hex, 16);
+                let r = (bigint >> 16) & 255;
+                let g = (bigint >> 8) & 255;
+                let b = bigint & 255;
+                return [r, g, b];
+            };
             // Function to convert RGB string to luminance
-            const getLuminance = (rgb) => {
-                console.log('RGB input to getLuminance:', rgb);
-                const rgbValues = rgb.match(/\d+/g).map(Number);
-                console.log('Parsed RGB values:', rgbValues);
-                const [r, g, b] = rgbValues.map(value => value / 255).map(value => {
+            const getLuminance = (hex) => {
+                console.log('Hex input to getLuminance:', hex);
+                const [r, g, b] = hexToRgb(hex);
+                console.log('Parsed RGB values:', [r, g, b]);
+                const [nr, ng, nb] = [r, g, b].map(value => value / 255).map(value => {
                     return value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
                 });
-                console.log('Normalized RGB values:', [r, g, b]);
-                return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+                console.log('Normalized RGB values:', [nr, ng, nb]);
+                return 0.2126 * nr + 0.7152 * ng + 0.0722 * nb;
             };
             // Determine text color based on luminance
             const luminance = getLuminance(computedColorValue);
