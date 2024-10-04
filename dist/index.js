@@ -218,12 +218,14 @@ class EditorForm extends lit_1.LitElement {
             }
 
             /* ensure full width for form controls not in two-controls class */
-            .form-row:not(.two-controls) .form-control > * {
-                width: var(--webkit-fill-available);
-            }
+
+            /*.form-row:not(.two-controls) .form-control > * {
+                width: 100% ;
+            }*/
 
             /* Base styles for form controls */
             .form-control {
+                width: auto;
                 display: flex; /* Use flexbox for internal alignment */
                 align-items: center;
                 padding: 8px;
