@@ -244,13 +244,12 @@ export default class EditorForm extends LitElement {
 
             /* ensure full width for form controls not in two-controls class */
 
-            /*.form-row:not(.two-controls) .form-control > * {
-                width: 100% ;
-            }*/
+            .form-row:not(.two-controls) .form-control > * {
+                width: -webkit-fill-available;
+            }
 
             /* Base styles for form controls */
             .form-control {
-                width: auto;
                 display: flex; /* Use flexbox for internal alignment */
                 align-items: center;
                 padding: 8px;
