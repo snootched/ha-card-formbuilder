@@ -161,7 +161,7 @@ function generateControl(control, card) {
             console.log('textColor:', textColor);
             return (0, lit_1.html) `
                 <div class="form-control" style="width: 100%;">
-                    <div style="width: 100%; height: 50px; background-color: ${colorValue}; border-radius: 25px; border: 1px solid #000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: ${textColor};">
+                    <div style="-webkit-fill-available; height: 50px; background-color: ${colorValue}; border-radius: 25px; border: 1px solid #000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: ${textColor};">
                         <div>${displayText}</div>
                         <div>${computedColorValue}</div>
                     </div>
