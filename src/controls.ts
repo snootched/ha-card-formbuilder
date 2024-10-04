@@ -178,7 +178,7 @@ export function generateControl(control: AnyControl, card: EditorForm){
             console.log('textColor:', textColor);
 
             return html`
-                <div class="form-control" style="width: 100%;">
+                <div class="form-control">
                     <div style="-webkit-fill-available; height: 50px; background-color: ${colorValue}; border-radius: 25px; border: 1px solid #000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: ${textColor};">
                         <div>${displayText}</div>
                         <div>${computedColorValue}</div>
