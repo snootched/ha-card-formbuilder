@@ -117,7 +117,7 @@ function generateControl(control, card) {
             `;
         case 'ColorPreview':
             let colorValue = (0, exports.getNestedProperty)(card._config, control.configValue);
-            console.log('colorValue:', colorValue);
+            //console.log('colorValue:', colorValue);
             // Provide a default color value if colorValue is not set
             if (!colorValue) {
                 colorValue = 'var(--default-color, #0000ff)'; // Default to a nice blue color
@@ -130,10 +130,10 @@ function generateControl(control, card) {
                 // Extract the CSS variable name from colorValue
                 const cssVariableNameMatch = colorValue.match(/var\((--[^,)]+)\)/);
                 const cssVariableName = cssVariableNameMatch ? cssVariableNameMatch[1] : colorValue;
-                console.log('cssVariableName:', cssVariableName);
+                //console.log('cssVariableName:', cssVariableName);
                 // Get the computed color value directly
                 computedColorValue = getComputedStyle(document.documentElement).getPropertyValue(cssVariableName).trim();
-                console.log('computedColorValue:', computedColorValue);
+                //console.log('computedColorValue:', computedColorValue);
                 // Check if computedColorValue is empty and provide a fallback
                 if (!computedColorValue) {
                     console.warn(`CSS variable ${cssVariableName} is not defined. Using fallback color.`);
@@ -156,20 +156,20 @@ function generateControl(control, card) {
             };
             // Function to convert RGB string to luminance
             const getLuminance = (hex) => {
-                console.log('Hex input to getLuminance:', hex);
+                //console.log('Hex input to getLuminance:', hex);
                 const [r, g, b] = hexToRgb(hex);
-                console.log('Parsed RGB values:', [r, g, b]);
+                //console.log('Parsed RGB values:', [r, g, b]);
                 const [nr, ng, nb] = [r, g, b].map(value => value / 255).map(value => {
                     return value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
                 });
-                console.log('Normalized RGB values:', [nr, ng, nb]);
+                //console.log('Normalized RGB values:', [nr, ng, nb]);
                 return 0.2126 * nr + 0.7152 * ng + 0.0722 * nb;
             };
             // Determine text color based on luminance
             const luminance = getLuminance(computedColorValue);
-            console.log('Luminance:', luminance);
+            //console.log('Luminance:', luminance);
             const textColor = luminance > 0.5 ? '#000' : '#fff';
-            console.log('textColor:', textColor);
+            //console.log('textColor:', textColor);
             return (0, lit_1.html) `
                 <div class="form-control">
                     <div style="-webkit-fill-available; height: 50px; background-color: ${colorValue}; border-radius: 25px; border: 1px solid #000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: ${textColor};">
