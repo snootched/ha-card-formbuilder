@@ -131,14 +131,17 @@ export function generateControl(control: AnyControl, card: EditorForm){
             //console.log('colorValue:', colorValue);
 
             // Provide a default color value if colorValue is not set
+            let displayText;
             if (!colorValue) {
-                colorValue = '#1B1B249A'; // Default to a nice blue color
+                colorValue = '#1B1B249A';
+                displayText = 'Color Not Set';
+            } else {
+                displayText = colorValue;
             }
 
             // Check if colorValue is a CSS variable or a hex color
             const isCssVariable = colorValue.startsWith('var(');
             let computedColorValue = colorValue;
-            let displayText = colorValue;
 
             if (isCssVariable) {
                 // Extract the CSS variable name from colorValue
@@ -155,7 +158,7 @@ export function generateControl(control: AnyControl, card: EditorForm){
                     console.warn(`CSS variable ${cssVariableName} is not defined. Using fallback color.`);
                     computedColorValue = '#0000ff'; // Fallback to a nice blue color
                 }
-            } else {
+            } else if (colorValue !== '#1B1B249A') {
                 displayText = 'User Defined Color';
             }
 
