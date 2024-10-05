@@ -128,7 +128,7 @@ export function generateControl(control: AnyControl, card: EditorForm){
             `;
         case 'ColorPreview':
             let colorValue = getNestedProperty(card._config, control.configValue);
-            console.log('colorValue:', colorValue);
+            //console.log('colorValue:', colorValue);
 
             // Provide a default color value if colorValue is not set
             if (!colorValue) {
@@ -144,11 +144,11 @@ export function generateControl(control: AnyControl, card: EditorForm){
                 // Extract the CSS variable name from colorValue
                 const cssVariableNameMatch = colorValue.match(/var\((--[^,)]+)\)/);
                 const cssVariableName = cssVariableNameMatch ? cssVariableNameMatch[1] : colorValue;
-                console.log('cssVariableName:', cssVariableName);
+                //console.log('cssVariableName:', cssVariableName);
 
                 // Get the computed color value directly
                 computedColorValue = getComputedStyle(document.documentElement).getPropertyValue(cssVariableName).trim();
-                console.log('computedColorValue:', computedColorValue);
+                //console.log('computedColorValue:', computedColorValue);
 
                 // Check if computedColorValue is empty and provide a fallback
                 if (!computedColorValue) {
@@ -175,21 +175,21 @@ export function generateControl(control: AnyControl, card: EditorForm){
 
             // Function to convert RGB string to luminance
             const getLuminance = (hex) => {
-                console.log('Hex input to getLuminance:', hex);
+                //console.log('Hex input to getLuminance:', hex);
                 const [r, g, b] = hexToRgb(hex);
-                console.log('Parsed RGB values:', [r, g, b]);
+                //console.log('Parsed RGB values:', [r, g, b]);
                 const [nr, ng, nb] = [r, g, b].map(value => value / 255).map(value => {
                     return value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
                 });
-                console.log('Normalized RGB values:', [nr, ng, nb]);
-                return 0.2126 * nr + 0.7152 * ng + 0.0722 * nb;
+                //console.log('Normalized RGB values:', [nr, ng, nb]);
+                   return 0.2126 * nr + 0.7152 * ng + 0.0722 * nb;
             };
 
             // Determine text color based on luminance
             const luminance = getLuminance(computedColorValue);
-            console.log('Luminance:', luminance);
+            //console.log('Luminance:', luminance);
             const textColor = luminance > 0.5 ? '#000' : '#fff';
-            console.log('textColor:', textColor);
+            //console.log('textColor:', textColor);
 
             return html`
                 <div class="form-control">
