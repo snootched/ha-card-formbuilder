@@ -120,7 +120,7 @@ function generateControl(control, card) {
             //console.log('colorValue:', colorValue);
             // Provide a default color value if colorValue is not set
             if (!colorValue) {
-                colorValue = 'var(--default-color, #0000ff)'; // Default to a nice blue color
+                colorValue = '#1B1B249A'; // Default to a nice blue color
             }
             // Check if colorValue is a CSS variable or a hex color
             const isCssVariable = colorValue.startsWith('var(');
@@ -147,12 +147,26 @@ function generateControl(control, card) {
             const hexToRgb = (hex) => {
                 // Remove the hash at the start if it's there
                 hex = hex.replace(/^#/, '');
-                // Parse the r, g, b values
-                let bigint = parseInt(hex, 16);
-                let r = (bigint >> 16) & 255;
-                let g = (bigint >> 8) & 255;
-                let b = bigint & 255;
-                return [r, g, b];
+                // Check if the hex includes an alpha channel
+                let bigint;
+                let r, g, b, a;
+                if (hex.length === 8) {
+                    // Parse the r, g, b, a values
+                    bigint = parseInt(hex, 16);
+                    r = (bigint >> 24) & 255;
+                    g = (bigint >> 16) & 255;
+                    b = (bigint >> 8) & 255;
+                    a = bigint & 255;
+                    return [r, g, b, a / 255]; // Return alpha as a normalized value (0 to 1)
+                }
+                else {
+                    // Parse the r, g, b values
+                    bigint = parseInt(hex, 16);
+                    r = (bigint >> 16) & 255;
+                    g = (bigint >> 8) & 255;
+                    b = bigint & 255;
+                    return [r, g, b];
+                }
             };
             // Function to convert RGB string to luminance
             const getLuminance = (hex) => {
