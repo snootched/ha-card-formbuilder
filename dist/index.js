@@ -5,9 +5,12 @@ const lit_1 = require("lit");
 const unsafe_html_js_1 = require("lit/directives/unsafe-html.js");
 const interfaces_1 = require("./interfaces");
 const controls_1 = require("./controls");
+require("@material/mwc-tab-bar");
+require("@material/mwc-tab");
 class EditorForm extends lit_1.LitElement {
     constructor() {
         super(...arguments);
+        this._selectedTab = 0;
         this._userStyles = (0, lit_1.css) ``;
         this._mergeUserStyles = true;
     }
@@ -22,6 +25,9 @@ class EditorForm extends lit_1.LitElement {
         if (!cardConfigData) {
             return (0, lit_1.html) ``;
         }
+        if (cardConfigData.tabs) {
+            return this.generateTabs(cardConfigData.tabs);
+        }
         const formControls = cardConfigData.render_form.map((row) => {
             if ((0, interfaces_1.isSection)(row)) {
                 return this.generateSection(row);
@@ -35,6 +41,33 @@ class EditorForm extends lit_1.LitElement {
                 ${formControls}
             </div>
         `;
+    }
+    generateTabs(tabs) {
+        const visibleTabs = tabs.filter(tab => this._evaluateCondition(tab.visibilityCondition || "true"));
+        return (0, lit_1.html) `
+            <mwc-tab-bar @MDCTabBar:activated=${this._handleTabActivated}>
+                ${visibleTabs.map(tab => (0, lit_1.html) `
+                    <mwc-tab label="${tab.label}"></mwc-tab>
+                `)}
+            </mwc-tab-bar>
+            <div class="tab-content">
+                ${visibleTabs.map((tab, index) => (0, lit_1.html) `
+                    <div class="tab-panel" ?hidden=${this._selectedTab !== index}>
+                        ${tab.content.map(item => {
+            if (item.type === "Section") {
+                return this.generateSection(item);
+            }
+            else if (item.type === "ControlRow") {
+                return this.generateRow(item);
+            }
+        })}
+                    </div>
+                `)}
+            </div>
+        `;
+    }
+    _handleTabActivated(event) {
+        this._selectedTab = event.detail.index;
     }
     generateSection(section) {
         var _a;
@@ -194,6 +227,19 @@ class EditorForm extends lit_1.LitElement {
                 grid-gap: 8px;
             }
 
+            /* Styles for tabs */
+            mwc-tab-bar {
+                border-bottom: 1px solid var(--divider-color);
+            }
+            .tab-content {
+                padding: 20px;
+            }
+            .tab-panel {
+                display: none;
+            }
+            .tab-panel[hidden] {
+                display: block;
+            }
             /* Base styles for form rows */
             .form-row {
                 display: grid;

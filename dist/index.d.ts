@@ -1,7 +1,10 @@
 import { HomeAssistant, LovelaceCardConfig } from "custom-card-helpers";
 import { LitElement, CSSResult } from "lit";
 import { ValueChangedEvent, ControlRow, Section } from "./interfaces";
+import '@material/mwc-tab-bar';
+import '@material/mwc-tab';
 export default class EditorForm extends LitElement {
+    _selectedTab: number;
     _hass: HomeAssistant;
     _config: LovelaceCardConfig;
     _userStyles: CSSResult;
@@ -9,6 +12,8 @@ export default class EditorForm extends LitElement {
     setConfig(config: LovelaceCardConfig): void;
     set hass(hass: HomeAssistant);
     generateForm(cardConfigData: any): import("lit-html").TemplateResult<1>;
+    generateTabs(tabs: any): import("lit-html").TemplateResult<1>;
+    _handleTabActivated(event: any): void;
     generateSection(section: Section): any;
     generateRow(row: ControlRow): import("lit-html").TemplateResult<1>;
     _evaluateCondition(condition: string, context?: any): boolean;
