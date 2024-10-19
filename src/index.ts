@@ -3,9 +3,12 @@ import { LitElement, CSSResult, css, html } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { ValueChangedEvent, HAInputElement, ControlRow, Section, isSection} from "./interfaces";
 import { generateControl, deepMerge } from "./controls";
-
+import '@material/mwc-tab-bar';
+import '@material/mwc-tab';
 
 export default class EditorForm extends LitElement {
+
+    _selectedTab: number = 0;
     _hass: HomeAssistant;
     _config: LovelaceCardConfig;
     _userStyles: CSSResult = css``;
@@ -25,6 +28,10 @@ export default class EditorForm extends LitElement {
             return html``;
         }
 
+        if (cardConfigData.tabs) {
+            return this.generateTabs(cardConfigData.tabs);
+        }
+
         const formControls = cardConfigData.render_form.map((row: ControlRow | Section) => {
             if (isSection(row)) {
                 return this.generateSection(row);
@@ -39,6 +46,37 @@ export default class EditorForm extends LitElement {
             </div>
         `;
     }
+
+
+    generateTabs(tabs) {
+        const visibleTabs = tabs.filter(tab => this._evaluateCondition(tab.visibilityCondition || "true"));
+
+        return html`
+            <mwc-tab-bar @MDCTabBar:activated=${this._handleTabActivated}>
+                ${visibleTabs.map(tab => html`
+                    <mwc-tab label="${tab.label}"></mwc-tab>
+                `)}
+            </mwc-tab-bar>
+            <div class="tab-content">
+                ${visibleTabs.map((tab, index) => html`
+                    <div class="tab-panel" ?hidden=${this._selectedTab !== index}>
+                        ${tab.content.map(item => {
+                            if (item.type === "Section") {
+                                return this.generateSection(item);
+                            } else if (item.type === "ControlRow") {
+                                return this.generateRow(item);
+                            }
+                        })}
+                    </div>
+                `)}
+            </div>
+        `;
+    }
+
+    _handleTabActivated(event) {
+        this._selectedTab = event.detail.index;
+    }
+
 
     generateSection(section: Section) {
 
@@ -219,6 +257,19 @@ export default class EditorForm extends LitElement {
                 grid-gap: 8px;
             }
 
+            /* Styles for tabs */
+            mwc-tab-bar {
+                border-bottom: 1px solid var(--divider-color);
+            }
+            .tab-content {
+                padding: 20px;
+            }
+            .tab-panel {
+                display: none;
+            }
+            .tab-panel[hidden] {
+                display: block;
+            }
             /* Base styles for form rows */
             .form-row {
                 display: grid;
