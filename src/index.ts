@@ -3,7 +3,9 @@ import { LitElement, CSSResult, css, html } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { ValueChangedEvent, HAInputElement, ControlRow, Section, isSection} from "./interfaces";
 import { generateControl, deepMerge } from "./controls";
-import '@material/web/tabs/tabs.js';
+if (!customElements.get('md-tabs')) {
+    import('@material/web/tabs/tabs.js');
+}
 
 
 export default class EditorForm extends LitElement {
