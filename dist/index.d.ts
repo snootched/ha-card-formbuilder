@@ -1,7 +1,6 @@
 import { HomeAssistant, LovelaceCardConfig } from "custom-card-helpers";
 import { LitElement, CSSResult } from "lit";
 import { ValueChangedEvent, ControlRow, Section } from "./interfaces";
-import '@material/web/tabs/tabs.js';
 export default class EditorForm extends LitElement {
     _selectedTab: number;
     _hass: HomeAssistant;
