@@ -10,7 +10,7 @@ if (!customElements.get('md-tabs')) {
 
 export default class EditorForm extends LitElement {
 
-    _selectedTab: number = 0;
+    private _selectedTab: number = 0;
     _hass: HomeAssistant;
     _config: LovelaceCardConfig;
     _userStyles: CSSResult = css``;
@@ -32,21 +32,20 @@ export default class EditorForm extends LitElement {
 
         if (cardConfigData.tabs) {
             return this.generateTabs(cardConfigData.tabs);
-        }
-
-        const formControls = cardConfigData.render_form.map((row: ControlRow | Section) => {
-            if (isSection(row)) {
-                return this.generateSection(row);
-            } else {
-                return this.generateRow(row);
-            }
-        });
-
-        return html`
+        } else {
+            const formControls = cardConfigData.render_form.map((row: ControlRow | Section) => {
+                if (isSection(row)) {
+                    return this.generateSection(row);
+                } else {
+                    return this.generateRow(row);
+                }
+            });
+            return html`
             <div class="card-form">
                 ${formControls}
             </div>
         `;
+        }
     }
 
 
@@ -77,6 +76,7 @@ export default class EditorForm extends LitElement {
 
     _handleTabActivated(event) {
         this._selectedTab = event.detail.index;
+        this.requestUpdate();
     }
 
 
