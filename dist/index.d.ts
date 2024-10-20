@@ -2,7 +2,7 @@ import { HomeAssistant, LovelaceCardConfig } from "custom-card-helpers";
 import { LitElement, CSSResult } from "lit";
 import { ValueChangedEvent, ControlRow, Section } from "./interfaces";
 export default class EditorForm extends LitElement {
-    _selectedTab: number;
+    private _selectedTab;
     _hass: HomeAssistant;
     _config: LovelaceCardConfig;
     _userStyles: CSSResult;

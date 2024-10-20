@@ -29,19 +29,21 @@ class EditorForm extends lit_1.LitElement {
         if (cardConfigData.tabs) {
             return this.generateTabs(cardConfigData.tabs);
         }
-        const formControls = cardConfigData.render_form.map((row) => {
-            if ((0, interfaces_1.isSection)(row)) {
-                return this.generateSection(row);
-            }
-            else {
-                return this.generateRow(row);
-            }
-        });
-        return (0, lit_1.html) `
+        else {
+            const formControls = cardConfigData.render_form.map((row) => {
+                if ((0, interfaces_1.isSection)(row)) {
+                    return this.generateSection(row);
+                }
+                else {
+                    return this.generateRow(row);
+                }
+            });
+            return (0, lit_1.html) `
             <div class="card-form">
                 ${formControls}
             </div>
         `;
+        }
     }
     generateTabs(tabs) {
         const visibleTabs = tabs.filter(tab => this._evaluateCondition(tab.visibilityCondition || "true"));
@@ -69,6 +71,7 @@ class EditorForm extends lit_1.LitElement {
     }
     _handleTabActivated(event) {
         this._selectedTab = event.detail.index;
+        this.requestUpdate();
     }
     generateSection(section) {
         var _a;
