@@ -53,18 +53,19 @@ export default class EditorForm extends LitElement {
         const visibleTabs = tabs.filter(tab => this._evaluateCondition(tab.visibilityCondition || "true"));
 
         return html`
-            <md-tabs @MDCTabBar:activated=${this._handleTabActivated}>
+            <mwc-tabs @MDCTabBar:activated=${this._handleTabActivated}>
                 ${visibleTabs.map((tab, index) => html`
-                    <md-tab label="${tab.label}" ?selected=${this._selectedTab === index}></md-tab>
+                    <mwc-tab label="${tab.label}" ?selected=${this._selectedTab === index}></mwc-tab>
                 `)}
-            </md-tabs>
+            </mwc-tabs>
             <div class="tab-content">
                 ${visibleTabs.map((tab, index) => html`
                     <div class="tab-panel" ?hidden=${this._selectedTab !== index}>
                         ${tab.content.map(item => {
                             if (item.type === "Section") {
                                 return this.generateSection(item);
-                            } else if (item.type === "ControlRow") {
+                            //} else if (item.type === "ControlRow") {
+                            } else {
                                 return this.generateRow(item);
                             }
                         })}
@@ -260,7 +261,7 @@ export default class EditorForm extends LitElement {
             }
 
              /* Styles for tabs */
-            md-tabs {
+            mwc-tabs {
                 border-bottom: 1px solid var(--divider-color);
             }
             .tab-content {
