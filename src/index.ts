@@ -3,10 +3,6 @@ import { LitElement, CSSResult, css, html } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { ValueChangedEvent, HAInputElement, ControlRow, Section, isSection} from "./interfaces";
 import { generateControl, deepMerge } from "./controls";
-if (!customElements.get('mwc-tab-bar')) {
-    import('@material/web/tabs/tabs.js');
-}
-
 
 export default class EditorForm extends LitElement {
 
