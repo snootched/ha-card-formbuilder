@@ -5,9 +5,6 @@ const lit_1 = require("lit");
 const unsafe_html_js_1 = require("lit/directives/unsafe-html.js");
 const interfaces_1 = require("./interfaces");
 const controls_1 = require("./controls");
-if (!customElements.get('mwc-tab-bar')) {
-    Promise.resolve().then(() => require('@material/web/tabs/tabs.js'));
-}
 class EditorForm extends lit_1.LitElement {
     constructor() {
         super(...arguments);
