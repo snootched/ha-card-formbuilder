@@ -92,6 +92,7 @@ export default class EditorForm extends LitElement {
             <${headerTag} slot="header">
                 ${section.icon ? `<ha-icon icon="${section.icon}"></ha-icon>` : ''}
                 ${section.label}
+                ${section.secondary ? `<div slot="secondary">${section.secondary}</div>` : ''}
             </${headerTag}>
         `;
 
@@ -102,6 +103,7 @@ export default class EditorForm extends LitElement {
                     .noCollapse=${section.noCollapse || false}
                     .outlined=${section.outlined || true}
                     .leftChevron=${section.leftChevron || false}
+                    .secondary=${section.secondary || ''}
                 >
                     ${unsafeHTML(headerContent)}
                     <div>

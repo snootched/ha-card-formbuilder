@@ -102,6 +102,7 @@ export interface Section {
     disabled?: boolean;
     required?: boolean;
     selector?: any;
+    secondary?: string;
   }
 
 export type AnyControl =
