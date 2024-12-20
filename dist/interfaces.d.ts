@@ -94,6 +94,7 @@ export interface Section {
     disabled?: boolean;
     required?: boolean;
     selector?: any;
+    secondary?: string;
 }
 export type AnyControl = Section | SelectorControl | MessageControl | RawHTMLControl | DividerControl | FillerControl | ColorPreviewControl;
 export declare function isSection(row: ControlRow | Section): row is Section;

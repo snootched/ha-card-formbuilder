@@ -84,6 +84,7 @@ class EditorForm extends lit_1.LitElement {
             <${headerTag} slot="header">
                 ${section.icon ? `<ha-icon icon="${section.icon}"></ha-icon>` : ''}
                 ${section.label}
+                ${section.secondary ? `<div slot="secondary">${section.secondary}</div>` : ''}
             </${headerTag}>
         `;
         return (0, lit_1.html) `
@@ -93,6 +94,7 @@ class EditorForm extends lit_1.LitElement {
                     .noCollapse=${section.noCollapse || false}
                     .outlined=${section.outlined || true}
                     .leftChevron=${section.leftChevron || false}
+                    .secondary=${section.secondary || ''}
                 >
                     ${(0, unsafe_html_js_1.unsafeHTML)(headerContent)}
                     <div>
