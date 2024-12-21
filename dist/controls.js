@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getNestedProperty = void 0;
 exports.deepMerge = deepMerge;
+exports.deepMerge2 = deepMerge2;
 exports.isObject = isObject;
 exports.generateControl = generateControl;
 const lit_1 = require("lit");
@@ -11,6 +12,28 @@ const getNestedProperty = (obj, path) => {
 };
 exports.getNestedProperty = getNestedProperty;
 function deepMerge(target, source) {
+    const output = { ...target };
+    for (const key of Object.keys(source)) {
+        const targetValue = output[key];
+        const sourceValue = source[key];
+        if (key === "type") {
+            // Preserve the type property
+            output[key] = sourceValue;
+        }
+        else if (Array.isArray(targetValue) && Array.isArray(sourceValue)) {
+            // Replace arrays entirely
+            output[key] = sourceValue;
+        }
+        else if (isObject(targetValue) && isObject(sourceValue)) {
+            output[key] = deepMerge({ ...targetValue }, sourceValue);
+        }
+        else {
+            output[key] = sourceValue;
+        }
+    }
+    return output;
+}
+function deepMerge2(target, source) {
     const output = { ...target };
     for (const key of Object.keys(source)) {
         const targetValue = output[key];
