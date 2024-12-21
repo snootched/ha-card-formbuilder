@@ -226,7 +226,13 @@ export default class EditorForm extends LitElement {
             }
 
             // Remove empty arrays
-            nestedConfig[lastKey] = updatedValues.length > 0 ? updatedValues : undefined;
+            //nestedConfig[lastKey] = updatedValues.length > 0 ? updatedValues : undefined;
+            if (updatedValues.length > 0) {
+                nestedConfig[lastKey] = updatedValues;
+            } else {
+                delete nestedConfig[lastKey];
+            }
+
         } else {
             // Handle switch case: update boolean value
             if (newValue === "" || newValue === null || newValue === undefined) {
