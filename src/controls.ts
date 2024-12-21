@@ -9,7 +9,7 @@ export const getNestedProperty = (obj: any, path: string): any => {
 };
 
 
-export function deepMerge<T>(target: T, source: T): T {
+export function deepMergeNew<T>(target: T, source: T): T {
     const output = { ...target } as any;
 
     for (const key of Object.keys(source)) {
@@ -32,7 +32,7 @@ export function deepMerge<T>(target: T, source: T): T {
     return output;
 }
 
-export function deepMerge2<T>(target: T, source: T): T {
+export function deepMerge<T>(target: T, source: T): T {
     const output = { ...target } as any;
 
     for (const key of Object.keys(source)) {

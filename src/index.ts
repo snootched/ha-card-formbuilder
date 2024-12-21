@@ -205,7 +205,36 @@ export default class EditorForm extends LitElement {
         }
     }
 
+
+
     private _updateConfig(configPath: string[], newValue: any, isArray: boolean = false) {
+        if (!configPath.length) {
+            return;
+        }
+
+        const configPathString = configPath.join(".");
+
+        let config = { ...this._config };
+        let nestedConfig = config;
+
+        for (let i = 0; i < configPath.length - 1; i++) {
+            nestedConfig[configPath[i]] = nestedConfig[configPath[i]] || {};
+            nestedConfig = nestedConfig[configPath[i]];
+        }
+
+        const lastKey = configPath[configPath.length - 1];
+
+        // Handle single value or array case
+        if (newValue === "" || newValue === null || newValue === undefined) {
+            delete nestedConfig[lastKey];
+        } else {
+            nestedConfig[lastKey] = newValue;
+        }
+
+        this._config = deepMerge(this._config, config);
+    }
+
+    private _updateConfig2(configPath: string[], newValue: any, isArray: boolean = false) {
         if (!configPath.length) {
             return;
         }
