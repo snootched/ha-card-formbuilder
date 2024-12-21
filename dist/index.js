@@ -145,9 +145,11 @@ class EditorForm extends lit_1.LitElement {
         const newValue = this._getNewValue(target, ev.detail);
         //console.debug("newValue: ", newValue);
         // Determine if the control is a checkbox
-        const isCheckbox = target.tagName === "HA-CHECKBOX";
+        // const isCheckbox = target.tagName === "HA-CHECKBOX";
+        // Determine if the control is handling an array
+        const isArray = target.tagName === "HA-SELECTOR" && Array.isArray(ev.detail.value);
         // Update the config using a helper function
-        this._updateConfig(configPath, newValue, isCheckbox);
+        this._updateConfig(configPath, newValue, isArray);
         // Fire the "config-changed" event
         (0, custom_card_helpers_1.fireEvent)(this, "config-changed", { config: this._config }, { bubbles: true, composed: true });
         // Request an update to reflect changes
@@ -155,7 +157,15 @@ class EditorForm extends lit_1.LitElement {
     }
     // Helper function to extract the new value based on control type
     _getNewValue(target, detail) {
-        if (target.tagName === "HA-SWITCH") {
+        if (target.tagName === "HA-SELECTOR") {
+            if (Array.isArray(detail === null || detail === void 0 ? void 0 : detail.value)) {
+                return detail === null || detail === void 0 ? void 0 : detail.value;
+            }
+            else {
+                return (detail === null || detail === void 0 ? void 0 : detail.value) !== undefined ? detail.value : target.value;
+            }
+        }
+        else if (target.tagName === "HA-SWITCH") {
             return target.checked !== undefined ? target.checked : target.__checked; // Handle switch control
         }
         else if (target.tagName === "HA-CHECKBOX") {
@@ -175,7 +185,7 @@ class EditorForm extends lit_1.LitElement {
             return value;
         }
     }
-    _updateConfig(configPath, newValue, isCheckbox = false) {
+    _updateConfig(configPath, newValue, isArray = false) {
         if (!configPath.length) {
             return;
         }
@@ -187,7 +197,7 @@ class EditorForm extends lit_1.LitElement {
             nestedConfig = nestedConfig[configPath[i]];
         }
         const lastKey = configPath[configPath.length - 1];
-        if (isCheckbox) {
+        if (isArray) {
             // Handle checkbox case: update array of values
             const existingValues = nestedConfig[lastKey] || [];
             const updatedValues = existingValues.slice(); // Create a copy to avoid mutation
