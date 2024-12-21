@@ -18,6 +18,7 @@ export default class EditorForm extends LitElement {
     _valueChanged(ev: ValueChangedEvent): void;
     private _getNewValue;
     private _updateConfig;
+    private _updateConfig2;
     updated(changedProperties: any): void;
     static get styles(): CSSResult;
 }

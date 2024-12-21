@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getNestedProperty = void 0;
+exports.deepMergeNew = deepMergeNew;
 exports.deepMerge = deepMerge;
-exports.deepMerge2 = deepMerge2;
 exports.isObject = isObject;
 exports.generateControl = generateControl;
 const lit_1 = require("lit");
@@ -11,7 +11,7 @@ const getNestedProperty = (obj, path) => {
     return path.split(".").reduce((acc, part) => acc && acc[part], obj);
 };
 exports.getNestedProperty = getNestedProperty;
-function deepMerge(target, source) {
+function deepMergeNew(target, source) {
     const output = { ...target };
     for (const key of Object.keys(source)) {
         const targetValue = output[key];
@@ -33,7 +33,7 @@ function deepMerge(target, source) {
     }
     return output;
 }
-function deepMerge2(target, source) {
+function deepMerge(target, source) {
     const output = { ...target };
     for (const key of Object.keys(source)) {
         const targetValue = output[key];
