@@ -8,7 +8,31 @@ export const getNestedProperty = (obj: any, path: string): any => {
     return path.split(".").reduce((acc, part) => acc && acc[part], obj);
 };
 
+
 export function deepMerge<T>(target: T, source: T): T {
+    const output = { ...target } as any;
+
+    for (const key of Object.keys(source)) {
+        const targetValue = output[key];
+        const sourceValue = (source as any)[key];
+
+        if (key === "type") {
+            // Preserve the type property
+            output[key] = sourceValue;
+        } else if (Array.isArray(targetValue) && Array.isArray(sourceValue)) {
+            // Replace arrays entirely
+            output[key] = sourceValue;
+        } else if (isObject(targetValue) && isObject(sourceValue)) {
+            output[key] = deepMerge({ ...targetValue }, sourceValue);
+        } else {
+            output[key] = sourceValue;
+        }
+    }
+
+    return output;
+}
+
+export function deepMerge2<T>(target: T, source: T): T {
     const output = { ...target } as any;
 
     for (const key of Object.keys(source)) {
