@@ -34,6 +34,12 @@ export interface Control {
     visibilityCondition?: any;
     disabledCondition?: any;
     requiredCondition?: any;
+    alertType?: string;
+    title?: string;
+    message?: string;
+    html?: string;
+    selector?: any;
+
 }
 
 export interface SelectorControl extends Control {
@@ -70,6 +76,15 @@ export interface FillerControl extends Control {
 export interface ColorPreviewControl extends Control {
   type: 'ColorPreview';
   configValue: string;
+}
+
+export interface CardPickerControl extends Control{
+  hass: any;
+  value: any;
+  label: string;
+  helper?: string;
+  disabled?: boolean;
+  required?: boolean;
 }
 
 export interface ControlRow {
@@ -112,7 +127,8 @@ export type AnyControl =
     | RawHTMLControl
     | DividerControl
     | FillerControl
-    | ColorPreviewControl;
+    | ColorPreviewControl
+    | CardPickerControl;
 
 export function isSection(row: ControlRow | Section): row is Section {
     return row.type === 'Section';

@@ -297,6 +297,33 @@ export default class EditorForm extends LitElement {
         }
     }
 
+
+    //CardPicker methods
+    _cardPicked(event: CustomEvent) {
+        const cardConfig = event.detail.value;
+        this._loadChildCardEditor(cardConfig);
+    }
+
+    async _loadChildCardEditor(cardConfig: any) {
+        const cardElement = await this._createCardElement(cardConfig);
+        const editorElement = await this._loadCardEditor(cardElement, cardConfig);
+
+        // Render the child card editor within your form builder
+        this.shadowRoot.querySelector('#child-card-editor').appendChild(editorElement);
+    }
+
+
+    async _createCardElement(cardConfig: LovelaceCardConfig): Promise<HTMLElement & { setConfig: (config: LovelaceCardConfig) => void }> {
+        const cardElement = document.createElement(cardConfig.type) as HTMLElement & { setConfig: (config: LovelaceCardConfig) => void };
+        cardElement.setConfig(cardConfig);
+        return cardElement;
+    }
+
+    async _loadCardEditor(cardElement: HTMLElement & { setConfig: (config: LovelaceCardConfig) => void }, cardConfig: LovelaceCardConfig): Promise<HTMLElement & { setConfig: (config: LovelaceCardConfig) => void }> {
+        const editorElement = document.createElement(`${cardElement.localName}-editor`) as HTMLElement & { setConfig: (config: LovelaceCardConfig) => void };
+        editorElement.setConfig(cardConfig); // Pass the configuration directly
+        return editorElement;
+    }
     static get styles() {
         const baseStyles = css`
             /* Base styles for the form container */
