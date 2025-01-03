@@ -78,15 +78,6 @@ export interface ColorPreviewControl extends Control {
   configValue: string;
 }
 
-export interface CardPickerControl extends Control{
-  hass: any;
-  value: any;
-  label: string;
-  helper?: string;
-  disabled?: boolean;
-  required?: boolean;
-}
-
 export interface ControlRow {
     label?: string;
     type?: string;
@@ -127,8 +118,7 @@ export type AnyControl =
     | RawHTMLControl
     | DividerControl
     | FillerControl
-    | ColorPreviewControl
-    | CardPickerControl;
+    | ColorPreviewControl;
 
 export function isSection(row: ControlRow | Section): row is Section {
     return row.type === 'Section';

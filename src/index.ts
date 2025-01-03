@@ -237,54 +237,6 @@ export default class EditorForm extends LitElement {
         this._config = deepMerge(this._config, config);
     }
 
-    private _updateConfig2(configPath: string[], newValue: any, isArray: boolean = false) {
-        if (!configPath.length) {
-            return;
-        }
-
-        const configPathString = configPath.join(".");
-
-        let config = { ...this._config };
-        let nestedConfig = config;
-
-        for (let i = 0; i < configPath.length - 1; i++) {
-            nestedConfig[configPath[i]] = nestedConfig[configPath[i]] || {};
-            nestedConfig = nestedConfig[configPath[i]];
-        }
-
-        const lastKey = configPath[configPath.length - 1];
-
-        if (isArray) {
-            // Handle checkbox case: update array of values
-            const existingValues = nestedConfig[lastKey] || [];
-            const updatedValues = existingValues.slice(); // Create a copy to avoid mutation
-
-            const index = updatedValues.indexOf(newValue);
-            if (index > -1) {
-                updatedValues.splice(index, 1); // Remove value if it exists (unchecked)
-            } else {
-                updatedValues.push(newValue); // Add value if it doesn't exist (checked)
-            }
-
-            // Remove empty arrays
-            //nestedConfig[lastKey] = updatedValues.length > 0 ? updatedValues : undefined;
-            if (updatedValues.length > 0) {
-                nestedConfig[lastKey] = updatedValues;
-            } else {
-                delete nestedConfig[lastKey];
-            }
-
-        } else {
-            // Handle switch case: update boolean value
-            if (newValue === "" || newValue === null || newValue === undefined) {
-                delete nestedConfig[lastKey];
-            } else {
-                nestedConfig[lastKey] = newValue;
-            }
-        }
-
-        this._config = deepMerge(this._config, config);
-    }
 
     updated(changedProperties) {
         super.updated(changedProperties);
@@ -297,33 +249,6 @@ export default class EditorForm extends LitElement {
         }
     }
 
-
-    //CardPicker methods
-    _cardPicked(event: CustomEvent) {
-        const cardConfig = event.detail.value;
-        this._loadChildCardEditor(cardConfig);
-    }
-
-    async _loadChildCardEditor(cardConfig: any) {
-        const cardElement = await this._createCardElement(cardConfig);
-        const editorElement = await this._loadCardEditor(cardElement, cardConfig);
-
-        // Render the child card editor within your form builder
-        this.shadowRoot.querySelector('#child-card-editor').appendChild(editorElement);
-    }
-
-
-    async _createCardElement(cardConfig: LovelaceCardConfig): Promise<HTMLElement & { setConfig: (config: LovelaceCardConfig) => void }> {
-        const cardElement = document.createElement(cardConfig.type) as HTMLElement & { setConfig: (config: LovelaceCardConfig) => void };
-        cardElement.setConfig(cardConfig);
-        return cardElement;
-    }
-
-    async _loadCardEditor(cardElement: HTMLElement & { setConfig: (config: LovelaceCardConfig) => void }, cardConfig: LovelaceCardConfig): Promise<HTMLElement & { setConfig: (config: LovelaceCardConfig) => void }> {
-        const editorElement = document.createElement(`${cardElement.localName}-editor`) as HTMLElement & { setConfig: (config: LovelaceCardConfig) => void };
-        editorElement.setConfig(cardConfig); // Pass the configuration directly
-        return editorElement;
-    }
     static get styles() {
         const baseStyles = css`
             /* Base styles for the form container */

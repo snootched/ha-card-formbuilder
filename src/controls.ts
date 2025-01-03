@@ -32,6 +32,7 @@ export function deepMerge<T>(target: T, source: T): T {
     return output;
 }
 
+/*
 export function deepMerge2<T>(target: T, source: T): T {
     const output = { ...target } as any;
 
@@ -53,6 +54,9 @@ export function deepMerge2<T>(target: T, source: T): T {
 
     return output;
 }
+*/
+
+
 export function isObject(obj: any): boolean {
     return obj !== null && typeof obj === "object";
 }
@@ -111,21 +115,6 @@ export function generateControl(control: AnyControl, card: EditorForm){
     }
 
     switch (control.type) {
-
-        case 'CardPicker':
-            return html`
-                <div class="form-control">
-                    <ha-card-picker
-                        .hass=${card._hass}
-                        .value=${getNestedProperty(card._config, control.configValue)}
-                        .label=${control.label}
-                        .helper=${control.helper}
-                        .disabled=${isDisabled}
-                        .required=${isRequired}
-                        @value-changed=${card._cardPicked}
-                    ></ha-card-picker>
-                </div>
-            `;
 
         case 'Selector':
             return html`
