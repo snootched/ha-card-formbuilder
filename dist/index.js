@@ -158,12 +158,14 @@ class EditorForm extends lit_1.LitElement {
     // Helper function to extract the new value based on control type
     _getNewValue(target, detail) {
         if (target.tagName === "HA-SELECTOR") {
-            if (Array.isArray(detail === null || detail === void 0 ? void 0 : detail.value)) {
-                return detail === null || detail === void 0 ? void 0 : detail.value;
+            return detail.value;
+            /*
+            if (Array.isArray(detail?.value)) {
+                return detail?.value;
+            } else {
+                return detail?.value !== undefined ? detail.value : target.value;
             }
-            else {
-                return (detail === null || detail === void 0 ? void 0 : detail.value) !== undefined ? detail.value : target.value;
-            }
+            */
         }
         else if (target.tagName === "HA-SWITCH") {
             return target.checked !== undefined ? target.checked : target.__checked; // Handle switch control
