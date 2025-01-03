@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getNestedProperty = void 0;
 exports.deepMerge = deepMerge;
-exports.deepMerge2 = deepMerge2;
 exports.isObject = isObject;
 exports.generateControl = generateControl;
 const lit_1 = require("lit");
@@ -33,27 +32,29 @@ function deepMerge(target, source) {
     }
     return output;
 }
-function deepMerge2(target, source) {
-    const output = { ...target };
+/*
+export function deepMerge2<T>(target: T, source: T): T {
+    const output = { ...target } as any;
+
     for (const key of Object.keys(source)) {
         const targetValue = output[key];
-        const sourceValue = source[key];
+        const sourceValue = (source as any)[key];
+
         if (key === "type") {
             // Preserve the type property
             output[key] = sourceValue;
-        }
-        else if (Array.isArray(targetValue) && Array.isArray(sourceValue)) {
+        } else if (Array.isArray(targetValue) && Array.isArray(sourceValue)) {
             output[key] = [...new Set([...targetValue, ...sourceValue])]; // Merge arrays while removing duplicates
-        }
-        else if (isObject(targetValue) && isObject(sourceValue)) {
+        } else if (isObject(targetValue) && isObject(sourceValue)) {
             output[key] = deepMerge({ ...targetValue }, sourceValue);
-        }
-        else {
+        } else {
             output[key] = sourceValue;
         }
     }
+
     return output;
 }
+*/
 function isObject(obj) {
     return obj !== null && typeof obj === "object";
 }
@@ -104,20 +105,6 @@ function generateControl(control, card) {
         control.selector.select.options = options;
     }
     switch (control.type) {
-        case 'CardPicker':
-            return (0, lit_1.html) `
-                <div class="form-control">
-                    <ha-card-picker
-                        .hass=${card._hass}
-                        .value=${(0, exports.getNestedProperty)(card._config, control.configValue)}
-                        .label=${control.label}
-                        .helper=${control.helper}
-                        .disabled=${isDisabled}
-                        .required=${isRequired}
-                        @value-changed=${card._cardPicked}
-                    ></ha-card-picker>
-                </div>
-            `;
         case 'Selector':
             return (0, lit_1.html) `
                 <div class="form-control">
