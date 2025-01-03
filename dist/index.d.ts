@@ -20,5 +20,15 @@ export default class EditorForm extends LitElement {
     private _updateConfig;
     private _updateConfig2;
     updated(changedProperties: any): void;
+    _cardPicked(event: CustomEvent): void;
+    _loadChildCardEditor(cardConfig: any): Promise<void>;
+    _createCardElement(cardConfig: LovelaceCardConfig): Promise<HTMLElement & {
+        setConfig: (config: LovelaceCardConfig) => void;
+    }>;
+    _loadCardEditor(cardElement: HTMLElement & {
+        setConfig: (config: LovelaceCardConfig) => void;
+    }, cardConfig: LovelaceCardConfig): Promise<HTMLElement & {
+        setConfig: (config: LovelaceCardConfig) => void;
+    }>;
     static get styles(): CSSResult;
 }

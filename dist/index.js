@@ -262,6 +262,27 @@ class EditorForm extends lit_1.LitElement {
             this.shadowRoot.adoptedStyleSheets = [this._userStyles.styleSheet];
         }
     }
+    //CardPicker methods
+    _cardPicked(event) {
+        const cardConfig = event.detail.value;
+        this._loadChildCardEditor(cardConfig);
+    }
+    async _loadChildCardEditor(cardConfig) {
+        const cardElement = await this._createCardElement(cardConfig);
+        const editorElement = await this._loadCardEditor(cardElement, cardConfig);
+        // Render the child card editor within your form builder
+        this.shadowRoot.querySelector('#child-card-editor').appendChild(editorElement);
+    }
+    async _createCardElement(cardConfig) {
+        const cardElement = document.createElement(cardConfig.type);
+        cardElement.setConfig(cardConfig);
+        return cardElement;
+    }
+    async _loadCardEditor(cardElement, cardConfig) {
+        const editorElement = document.createElement(`${cardElement.localName}-editor`);
+        editorElement.setConfig(cardConfig); // Pass the configuration directly
+        return editorElement;
+    }
     static get styles() {
         const baseStyles = (0, lit_1.css) `
             /* Base styles for the form container */

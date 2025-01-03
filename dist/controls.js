@@ -80,7 +80,7 @@ function generateControl(control, card) {
   
        - controls:
           - label: "options from vars"
-            configValue: "cblcars_card_config.variables.card.color.background.inactive"
+            configValue: "variables.card.color.background.inactive"
             type: Selector
             selector:
               select:
@@ -104,22 +104,36 @@ function generateControl(control, card) {
         control.selector.select.options = options;
     }
     switch (control.type) {
+        case 'CardPicker':
+            return (0, lit_1.html) `
+                <div class="form-control">
+                    <ha-card-picker
+                        .hass=${card._hass}
+                        .value=${(0, exports.getNestedProperty)(card._config, control.configValue)}
+                        .label=${control.label}
+                        .helper=${control.helper}
+                        .disabled=${isDisabled}
+                        .required=${isRequired}
+                        @value-changed=${card._cardPicked}
+                    ></ha-card-picker>
+                </div>
+            `;
         case 'Selector':
             return (0, lit_1.html) `
-            <div class="form-control">
-            <ha-selector
-                .hass=${card._hass}
-                .selector=${control.selector}
-                .configValue=${control.configValue}
-                .value=${(0, exports.getNestedProperty)(card._config, control.configValue)}
-                .label=${control.label}
-                .helper=${control.helper}
-                .disabled=${isDisabled}
-                .required=${isRequired}
-                @value-changed=${card._valueChanged}
-            ></ha-selector>
-            </div>
-            `;
+                <div class="form-control">
+                <ha-selector
+                    .hass=${card._hass}
+                    .selector=${control.selector}
+                    .configValue=${control.configValue}
+                    .value=${(0, exports.getNestedProperty)(card._config, control.configValue)}
+                    .label=${control.label}
+                    .helper=${control.helper}
+                    .disabled=${isDisabled}
+                    .required=${isRequired}
+                    @value-changed=${card._valueChanged}
+                ></ha-selector>
+                </div>
+                `;
         case 'Filler':
             return (0, lit_1.html) `<div class="form-control"></div>`;
         case 'Divider':
