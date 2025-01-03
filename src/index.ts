@@ -182,11 +182,14 @@ export default class EditorForm extends LitElement {
     // Helper function to extract the new value based on control type
     private _getNewValue(target: HAInputElement, detail?: ValueChangedEvent['detail']): string | boolean | undefined | string[] | number | object {
         if (target.tagName === "HA-SELECTOR") {
+            return detail.value;
+            /*
             if (Array.isArray(detail?.value)) {
                 return detail?.value;
             } else {
                 return detail?.value !== undefined ? detail.value : target.value;
             }
+            */
         } else if (target.tagName === "HA-SWITCH") {
             return target.checked !== undefined ? target.checked : target.__checked; // Handle switch control
         } else if (target.tagName === "HA-CHECKBOX") {
