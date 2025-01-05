@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const custom_card_helpers_1 = require("custom-card-helpers");
-const js_yaml_1 = require("js-yaml");
+const jsyaml = require("js-yaml");
 const lit_1 = require("lit");
 const unsafe_html_js_1 = require("lit/directives/unsafe-html.js");
 const interfaces_1 = require("./interfaces");
@@ -161,7 +161,7 @@ class EditorForm extends lit_1.LitElement {
         var _a, _b, _c;
         try {
             if (target.tagName === "HA-CODE-EDITOR") {
-                let parsedValue = js_yaml_1.default.load(typeof (detail === null || detail === void 0 ? void 0 : detail.value) === 'string' ? detail.value : '');
+                let parsedValue = jsyaml.load(typeof (detail === null || detail === void 0 ? void 0 : detail.value) === 'string' ? detail.value : '');
                 return parsedValue;
             }
         }
