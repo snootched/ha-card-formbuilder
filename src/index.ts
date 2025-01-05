@@ -1,4 +1,5 @@
 import { HomeAssistant, LovelaceCardConfig, fireEvent } from "custom-card-helpers";
+import jsyaml from 'js-yaml';
 import { LitElement, CSSResult, css, html } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { ValueChangedEvent, HAInputElement, ControlRow, Section, isSection} from "./interfaces";
@@ -179,36 +180,32 @@ export default class EditorForm extends LitElement {
         this.requestUpdate();
     }
 
+
     // Helper function to extract the new value based on control type
     private _getNewValue(target: HAInputElement, detail?: ValueChangedEvent['detail']): string | boolean | undefined | string[] | number | object {
-        if (target.tagName === "HA-SELECTOR") {
-            return detail.value;
-            /*
-            if (Array.isArray(detail?.value)) {
-                return detail?.value;
-            } else {
-                return detail?.value !== undefined ? detail.value : target.value;
+
+        try {
+            if (target.tagName === "HA-CODE-EDITOR") {
+                return jsyaml.load(detail?.value);
             }
-            */
-        } else if (target.tagName === "HA-SWITCH") {
-            return target.checked !== undefined ? target.checked : target.__checked; // Handle switch control
-        } else if (target.tagName === "HA-CHECKBOX") {
-            // Return the value of the checkbox, whether checked or unchecked
-            //console.debug("ha-checkbox target: ", target);
-            return target.value;
-        } else if (target.tagName === "HA-FORM") {
-            // Handle ha-form control
-            //console.debug("ha-form detail: ", detail);
-            //console.debug("Object values[0]: ",Object.values(detail.value)[0]);
-            const formValue = Object.values(detail.value)[0];
-            return formValue;
-        } else {
-            const value = detail?.value !== undefined ? detail.value : target.value;
-            return value;
+        } catch (e) {
+            console.error("Failed to parse YAML input:", e);
+            return;
+        }
+
+        switch (target.tagName) {
+            case "HA-SELECTOR":
+                return detail?.value;
+            case "HA-SWITCH":
+                return target.checked ?? target.__checked;
+            case "HA-CHECKBOX":
+                return target.value;
+            case "HA-FORM":
+                return Object.values(detail?.value ?? {})[0];
+            default:
+                return detail?.value ?? target.value;
         }
     }
-
-
 
     private _updateConfig(configPath: string[], newValue: any, isArray: boolean = false) {
         if (!configPath.length) {
