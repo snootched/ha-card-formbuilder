@@ -1,9 +1,16 @@
 import { HomeAssistant, LovelaceCardConfig, fireEvent } from "custom-card-helpers";
-import * as jsyaml from "js-yaml";
 import { LitElement, CSSResult, css, html } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { ValueChangedEvent, HAInputElement, ControlRow, Section, isSection} from "./interfaces";
 import { generateControl, deepMerge } from "./controls";
+
+function debounce(func: (...args: any[]) => void, wait: number) {
+    let timeout: number | undefined;
+    return (...args: any[]) => {
+        clearTimeout(timeout);
+        timeout = window.setTimeout(() => func.apply(this, args), wait);
+    };
+}
 
 export default class EditorForm extends LitElement {
 
@@ -180,19 +187,11 @@ export default class EditorForm extends LitElement {
         this.requestUpdate();
     }
 
+    // Debounce the _valueChanged method
+    _debouncedValueChanged = debounce(this._valueChanged.bind(this), 300);
 
     // Helper function to extract the new value based on control type
     private _getNewValue(target: HAInputElement, detail?: ValueChangedEvent['detail']): string | boolean | undefined | string[] | number | object {
-
-        try {
-            if (target.tagName === "HA-CODE-EDITOR") {
-                let parsedValue = jsyaml.load(typeof detail?.value === 'string' ? detail.value : '');
-                return parsedValue as object;
-            }
-        } catch (e) {
-            console.error("Failed to parse YAML input:", e);
-            return;
-        }
 
         switch (target.tagName) {
             case "HA-SELECTOR":

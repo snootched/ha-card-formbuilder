@@ -128,27 +128,11 @@ export function generateControl(control: AnyControl, card: EditorForm){
                     .helper=${control.helper}
                     .disabled=${isDisabled}
                     .required=${isRequired}
-                    @value-changed=${card._valueChanged}
+                    @value-changed=${card._debouncedValueChanged}
                 ></ha-selector>
                 </div>
                 `;
 
-        case 'CodeEditor':
-            return html`
-                <div class="form-control">
-                    <ha-code-editor
-                        .configValue=${control.configValue}
-                        .hass=${card._hass}
-                        .value=${getNestedProperty(card._config, control.configValue)}
-                        .label=${control.label}
-                        .helper=${control.helper}
-                        .mode=${control.mode}
-                        .disabled=${isDisabled}
-                        .required=${isRequired}
-                        @value-changed=${card._valueChanged}
-                    ></ha-code-editor>
-                </div>
-            `;
         case 'Filler':
             return html`<div class="form-control"></div>`;
 
