@@ -1,17 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const custom_card_helpers_1 = require("custom-card-helpers");
-const jsyaml = require("js-yaml");
 const lit_1 = require("lit");
 const unsafe_html_js_1 = require("lit/directives/unsafe-html.js");
 const interfaces_1 = require("./interfaces");
 const controls_1 = require("./controls");
+function debounce(func, wait) {
+    let timeout;
+    return (...args) => {
+        clearTimeout(timeout);
+        timeout = window.setTimeout(() => func.apply(this, args), wait);
+    };
+}
 class EditorForm extends lit_1.LitElement {
     constructor() {
         super(...arguments);
         this._selectedTab = 0;
         this._userStyles = (0, lit_1.css) ``;
         this._mergeUserStyles = true;
+        // Debounce the _valueChanged method
+        this._debouncedValueChanged = debounce(this._valueChanged.bind(this), 300);
     }
     setConfig(config) {
         this._config = config;
@@ -159,16 +167,6 @@ class EditorForm extends lit_1.LitElement {
     // Helper function to extract the new value based on control type
     _getNewValue(target, detail) {
         var _a, _b, _c;
-        try {
-            if (target.tagName === "HA-CODE-EDITOR") {
-                let parsedValue = jsyaml.load(typeof (detail === null || detail === void 0 ? void 0 : detail.value) === 'string' ? detail.value : '');
-                return parsedValue;
-            }
-        }
-        catch (e) {
-            console.error("Failed to parse YAML input:", e);
-            return;
-        }
         switch (target.tagName) {
             case "HA-SELECTOR":
                 return detail === null || detail === void 0 ? void 0 : detail.value;
