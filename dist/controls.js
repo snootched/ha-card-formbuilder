@@ -125,6 +125,7 @@ function generateControl(control, card) {
             return (0, lit_1.html) `
                 <div class="form-control">
                     <ha-code-editor
+                        .configValue=${control.configValue}
                         .hass=${card._hass}
                         .value=${(0, exports.getNestedProperty)(card._config, control.configValue)}
                         .label=${control.label}
