@@ -5,21 +5,12 @@ const lit_1 = require("lit");
 const unsafe_html_js_1 = require("lit/directives/unsafe-html.js");
 const interfaces_1 = require("./interfaces");
 const controls_1 = require("./controls");
-function debounce(func, wait) {
-    let timeout;
-    return (...args) => {
-        clearTimeout(timeout);
-        timeout = window.setTimeout(() => func.apply(this, args), wait);
-    };
-}
 class EditorForm extends lit_1.LitElement {
     constructor() {
         super(...arguments);
         this._selectedTab = 0;
         this._userStyles = (0, lit_1.css) ``;
         this._mergeUserStyles = true;
-        // Debounce the _valueChanged method
-        this._debouncedValueChanged = debounce(this._valueChanged.bind(this), 300);
     }
     setConfig(config) {
         this._config = config;

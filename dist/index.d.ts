@@ -16,7 +16,6 @@ export default class EditorForm extends LitElement {
     generateRow(row: ControlRow): import("lit-html").TemplateResult<1>;
     _evaluateCondition(condition: string, context?: any): boolean;
     _valueChanged(ev: ValueChangedEvent): void;
-    _debouncedValueChanged: (...args: any[]) => void;
     private _getNewValue;
     private _updateConfig;
     updated(changedProperties: any): void;
