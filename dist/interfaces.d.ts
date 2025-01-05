@@ -70,6 +70,10 @@ export interface ColorPreviewControl extends Control {
     type: 'ColorPreview';
     configValue: string;
 }
+export interface CodeEditorControl extends Control {
+    type: 'CodeEditor';
+    mode: string;
+}
 export interface ControlRow {
     label?: string;
     type?: string;
@@ -101,6 +105,6 @@ export interface Section {
     selector?: any;
     secondary?: string;
 }
-export type AnyControl = Section | SelectorControl | MessageControl | RawHTMLControl | DividerControl | FillerControl | ColorPreviewControl;
+export type AnyControl = Section | SelectorControl | MessageControl | RawHTMLControl | DividerControl | FillerControl | ColorPreviewControl | CodeEditorControl;
 export declare function isSection(row: ControlRow | Section): row is Section;
 export declare function isControlRow(row: ControlRow | Section): row is ControlRow;
