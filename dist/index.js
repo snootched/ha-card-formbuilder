@@ -161,7 +161,8 @@ class EditorForm extends lit_1.LitElement {
         var _a, _b, _c;
         try {
             if (target.tagName === "HA-CODE-EDITOR") {
-                return js_yaml_1.default.load(detail === null || detail === void 0 ? void 0 : detail.value);
+                let parsedValue = js_yaml_1.default.load(typeof (detail === null || detail === void 0 ? void 0 : detail.value) === 'string' ? detail.value : '');
+                return parsedValue;
             }
         }
         catch (e) {
