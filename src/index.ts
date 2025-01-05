@@ -1,5 +1,5 @@
 import { HomeAssistant, LovelaceCardConfig, fireEvent } from "custom-card-helpers";
-import jsyaml from "js-yaml";
+import * as jsyaml from "js-yaml";
 import { LitElement, CSSResult, css, html } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { ValueChangedEvent, HAInputElement, ControlRow, Section, isSection} from "./interfaces";
