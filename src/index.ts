@@ -1,5 +1,5 @@
 import { HomeAssistant, LovelaceCardConfig, fireEvent } from "custom-card-helpers";
-import jsyaml from 'js-yaml';
+import jsyaml from "js-yaml";
 import { LitElement, CSSResult, css, html } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { ValueChangedEvent, HAInputElement, ControlRow, Section, isSection} from "./interfaces";
@@ -186,7 +186,8 @@ export default class EditorForm extends LitElement {
 
         try {
             if (target.tagName === "HA-CODE-EDITOR") {
-                return jsyaml.load(detail?.value);
+                let parsedValue = jsyaml.load(typeof detail?.value === 'string' ? detail.value : '');
+                return parsedValue as object;
             }
         } catch (e) {
             console.error("Failed to parse YAML input:", e);

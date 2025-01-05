@@ -1,6 +1,6 @@
 {
   "name": "ha-editor-formbuilder-yaml",
-  "version": "2025.01.2-beta.6",
+  "version": "2025.01.2-beta.7",
   "description": "A reimplementation of ha-editor-formbuilder - supporting YAML configuration of HA Selector controls, conditional expresssions, and more.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -38,11 +38,12 @@
   "homepage": "https://github.com/snootched/ha-editor-formbuilder#readme",
   "dependencies": {
     "custom-card-helpers": "^1.9.0",
-    "js-yaml": "^4.1.0",
     "lit": "^3.1.2",
     "typescript": "^5.5.4"
   },
   "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "js-yaml": "^4.1.0",
     "rmraf": "^1.0.3",
     "yarn": "^1.22.22"
   }
