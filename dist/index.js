@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const custom_card_helpers_1 = require("custom-card-helpers");
+const js_yaml_1 = require("js-yaml");
 const lit_1 = require("lit");
 const unsafe_html_js_1 = require("lit/directives/unsafe-html.js");
 const interfaces_1 = require("./interfaces");
@@ -157,34 +158,27 @@ class EditorForm extends lit_1.LitElement {
     }
     // Helper function to extract the new value based on control type
     _getNewValue(target, detail) {
-        if (target.tagName === "HA-SELECTOR") {
-            return detail.value;
-            /*
-            if (Array.isArray(detail?.value)) {
-                return detail?.value;
-            } else {
-                return detail?.value !== undefined ? detail.value : target.value;
+        var _a, _b, _c;
+        try {
+            if (target.tagName === "HA-CODE-EDITOR") {
+                return js_yaml_1.default.load(detail === null || detail === void 0 ? void 0 : detail.value);
             }
-            */
         }
-        else if (target.tagName === "HA-SWITCH") {
-            return target.checked !== undefined ? target.checked : target.__checked; // Handle switch control
+        catch (e) {
+            console.error("Failed to parse YAML input:", e);
+            return;
         }
-        else if (target.tagName === "HA-CHECKBOX") {
-            // Return the value of the checkbox, whether checked or unchecked
-            //console.debug("ha-checkbox target: ", target);
-            return target.value;
-        }
-        else if (target.tagName === "HA-FORM") {
-            // Handle ha-form control
-            //console.debug("ha-form detail: ", detail);
-            //console.debug("Object values[0]: ",Object.values(detail.value)[0]);
-            const formValue = Object.values(detail.value)[0];
-            return formValue;
-        }
-        else {
-            const value = (detail === null || detail === void 0 ? void 0 : detail.value) !== undefined ? detail.value : target.value;
-            return value;
+        switch (target.tagName) {
+            case "HA-SELECTOR":
+                return detail === null || detail === void 0 ? void 0 : detail.value;
+            case "HA-SWITCH":
+                return (_a = target.checked) !== null && _a !== void 0 ? _a : target.__checked;
+            case "HA-CHECKBOX":
+                return target.value;
+            case "HA-FORM":
+                return Object.values((_b = detail === null || detail === void 0 ? void 0 : detail.value) !== null && _b !== void 0 ? _b : {})[0];
+            default:
+                return (_c = detail === null || detail === void 0 ? void 0 : detail.value) !== null && _c !== void 0 ? _c : target.value;
         }
     }
     _updateConfig(configPath, newValue, isArray = false) {
