@@ -4,14 +4,6 @@ import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { ValueChangedEvent, HAInputElement, ControlRow, Section, isSection} from "./interfaces";
 import { generateControl, deepMerge } from "./controls";
 
-function debounce(func: (...args: any[]) => void, wait: number) {
-    let timeout: number | undefined;
-    return (...args: any[]) => {
-        clearTimeout(timeout);
-        timeout = window.setTimeout(() => func.apply(this, args), wait);
-    };
-}
-
 export default class EditorForm extends LitElement {
 
     private _selectedTab: number = 0;
@@ -186,9 +178,6 @@ export default class EditorForm extends LitElement {
         // Request an update to reflect changes
         this.requestUpdate();
     }
-
-    // Debounce the _valueChanged method
-    _debouncedValueChanged = debounce(this._valueChanged.bind(this), 300);
 
     // Helper function to extract the new value based on control type
     private _getNewValue(target: HAInputElement, detail?: ValueChangedEvent['detail']): string | boolean | undefined | string[] | number | object {

@@ -128,7 +128,7 @@ export function generateControl(control: AnyControl, card: EditorForm){
                     .helper=${control.helper}
                     .disabled=${isDisabled}
                     .required=${isRequired}
-                    @value-changed=${card._debouncedValueChanged}
+                    @value-changed=${card._valueChanged}
                 ></ha-selector>
                 </div>
                 `;
