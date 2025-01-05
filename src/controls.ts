@@ -137,6 +137,7 @@ export function generateControl(control: AnyControl, card: EditorForm){
             return html`
                 <div class="form-control">
                     <ha-code-editor
+                        .configValue=${control.configValue}
                         .hass=${card._hass}
                         .value=${getNestedProperty(card._config, control.configValue)}
                         .label=${control.label}
