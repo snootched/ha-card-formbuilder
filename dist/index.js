@@ -8,7 +8,7 @@ const controls_1 = require("./controls");
 class EditorForm extends lit_1.LitElement {
     constructor() {
         super(...arguments);
-        this._selectedTab = 0;
+        this._selectedTab = "panel-0"; // Default to first tab
         this._userStyles = (0, lit_1.css) ``;
         this._mergeUserStyles = true;
     }
@@ -42,34 +42,35 @@ class EditorForm extends lit_1.LitElement {
         `;
         }
     }
+    _handleTabActivated(event) {
+        this._selectedTab = event.target.name;
+        this.requestUpdate();
+    }
     generateTabs(tabs) {
         const visibleTabs = tabs.filter(tab => this._evaluateCondition(tab.visibilityCondition || "true"));
         return (0, lit_1.html) `
-            <mwc-tab-bar @MDCTabBar:activated=${this._handleTabActivated}>
+            <sl-tab-group @sl-tab-show=${this._handleTabActivated}>
                 ${visibleTabs.map((tab, index) => (0, lit_1.html) `
-                    <mwc-tab label="${tab.label}" ?selected=${this._selectedTab === index}></mwc-tab>
+                    <sl-tab slot="nav" panel="panel-${index}" ?active=${this._selectedTab === index}>
+                        ${tab.label}
+                    </sl-tab>
                 `)}
-            </mwc-tab-bar>
+            </sl-tab-group>
             <div class="tab-content">
                 ${visibleTabs.map((tab, index) => (0, lit_1.html) `
-                    <div class="tab-panel" ?hidden=${this._selectedTab !== index}>
+                    <sl-tab-panel name="panel-${index}" ?hidden=${this._selectedTab !== index}>
                         ${tab.content.map(item => {
             if (item.type === "Section") {
                 return this.generateSection(item);
-                //} else if (item.type === "ControlRow") {
             }
             else {
                 return this.generateRow(item);
             }
         })}
-                    </div>
+                    </sl-tab-panel>
                 `)}
             </div>
         `;
-    }
-    _handleTabActivated(event) {
-        this._selectedTab = event.detail.index;
-        this.requestUpdate();
     }
     generateSection(section) {
         var _a;
