@@ -6,7 +6,8 @@ import { generateControl, deepMerge } from "./controls";
 
 export default class EditorForm extends LitElement {
 
-    private _selectedTab: number = 0;
+    private _selectedTab: string = "panel-0"; // Default to first tab
+
     _hass: HomeAssistant;
     _config: LovelaceCardConfig;
     _userStyles: CSSResult = css``;
@@ -44,38 +45,37 @@ export default class EditorForm extends LitElement {
         }
     }
 
+    _handleTabActivated(event) {
+        this._selectedTab = event.target.name;
+        this.requestUpdate();
+    }
 
     generateTabs(tabs) {
         const visibleTabs = tabs.filter(tab => this._evaluateCondition(tab.visibilityCondition || "true"));
 
         return html`
-            <mwc-tab-bar @MDCTabBar:activated=${this._handleTabActivated}>
+            <sl-tab-group @sl-tab-show=${this._handleTabActivated}>
                 ${visibleTabs.map((tab, index) => html`
-                    <mwc-tab label="${tab.label}" ?selected=${this._selectedTab === index}></mwc-tab>
+                    <sl-tab slot="nav" panel="panel-${index}" ?active=${this._selectedTab === index}>
+                        ${tab.label}
+                    </sl-tab>
                 `)}
-            </mwc-tab-bar>
+            </sl-tab-group>
             <div class="tab-content">
                 ${visibleTabs.map((tab, index) => html`
-                    <div class="tab-panel" ?hidden=${this._selectedTab !== index}>
+                    <sl-tab-panel name="panel-${index}" ?hidden=${this._selectedTab !== index}>
                         ${tab.content.map(item => {
                             if (item.type === "Section") {
                                 return this.generateSection(item);
-                            //} else if (item.type === "ControlRow") {
                             } else {
                                 return this.generateRow(item);
                             }
                         })}
-                    </div>
+                    </sl-tab-panel>
                 `)}
             </div>
         `;
     }
-
-    _handleTabActivated(event) {
-        this._selectedTab = event.detail.index;
-        this.requestUpdate();
-    }
-
 
     generateSection(section: Section) {
 
