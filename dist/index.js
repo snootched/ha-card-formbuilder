@@ -44,7 +44,6 @@ class EditorForm extends lit_1.LitElement {
     }
     _handleTabActivated(event) {
         this._selectedTab = event.detail.name;
-        console.log("Tab activated:", this._selectedTab);
         this.requestUpdate();
     }
     generateTabs(tabs) {
