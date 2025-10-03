@@ -77,21 +77,18 @@ export default class EditorForm extends LitElement {
     }
 
     _renderHaTabs(visibleTabs) {
+        // New HA 2025.10 tab structure: tabs (slot="nav") and panels live inside the same ha-tab-group
         return html`
             <ha-tab-group @wa-tab-show=${this._handleTabActivated}>
                 ${visibleTabs.map((tab, index) => html`
-                    <ha-tab panel="panel-${index}" ?active=${this._selectedTab === `panel-${index}`}>
+                    <ha-tab slot="nav" panel="panel-${index}" ?active=${this._selectedTab === `panel-${index}`}>
                         ${tab.label}
                     </ha-tab>
-                `)}
-            </ha-tab-group>
-            <div class="tab-content">
-                ${visibleTabs.map((tab, index) => html`
                     <ha-tab-panel name="panel-${index}" ?hidden=${this._selectedTab !== `panel-${index}`}>
                         ${tab.content.map(item => item.type === "Section" ? this.generateSection(item) : this.generateRow(item))}
                     </ha-tab-panel>
                 `)}
-            </div>
+            </ha-tab-group>
         `;
     }
 
