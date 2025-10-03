@@ -43,20 +43,9 @@ class EditorForm extends lit_1.LitElement {
         }
     }
     _handleTabActivated(event) {
-        console.log('Tab event fired');
-        // The event fires before the tab group updates, so we need to use a timeout
-        // to let the DOM update with the new active state
-        setTimeout(() => {
-            const tabGroup = event.target;
-            const activeTab = (tabGroup === null || tabGroup === void 0 ? void 0 : tabGroup.querySelector('ha-tab-group-tab[aria-selected="true"]')) ||
-                (tabGroup === null || tabGroup === void 0 ? void 0 : tabGroup.querySelector('ha-tab-group-tab[active]'));
-            const tabName = activeTab === null || activeTab === void 0 ? void 0 : activeTab.getAttribute('name');
-            console.log('Found active tab:', tabName);
-            if (tabName && tabName !== this._selectedTab) {
-                this._selectedTab = tabName;
-                this.requestUpdate();
-            }
-        }, 0);
+        console.log('Event detail:', event.detail);
+        this._selectedTab = event.detail.name;
+        this.requestUpdate();
     }
     generateTabs(tabs) {
         const visibleTabs = tabs.filter(tab => this._evaluateCondition(tab.visibilityCondition || "true"));
