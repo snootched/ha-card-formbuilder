@@ -46,7 +46,9 @@ export default class EditorForm extends LitElement {
     }
 
     _handleTabActivated(event) {
+        console.log('Tab activated:', event.detail.name, 'Previous:', this._selectedTab);
         this._selectedTab = event.detail.name;
+        console.log('New selected tab:', this._selectedTab);
         this.requestUpdate();
     }
 
@@ -56,23 +58,28 @@ export default class EditorForm extends LitElement {
         return html`
             <ha-tab-group @wa-tab-show=${this._handleTabActivated}>
                 ${visibleTabs.map((tab, index) => html`
-                    <ha-tab-group-tab slot="nav" name="panel-${index}" ?active=${this._selectedTab === `panel-${index}`}>
+                    <ha-tab-group-tab slot="nav" name="panel-${index}">
                         ${tab.label}
                     </ha-tab-group-tab>
                 `)}
             </ha-tab-group>
             <div class="tab-content">
-                ${visibleTabs.map((tab, index) => html`
-                    <div class="tab-panel" ?hidden=${this._selectedTab !== `panel-${index}`}>
-                        ${tab.content.map(item => {
-                            if (item.type === "Section") {
-                                return this.generateSection(item);
-                            } else {
-                                return this.generateRow(item);
-                            }
-                        })}
-                    </div>
-                `)}
+                ${visibleTabs.map((tab, index) => {
+                    const panelName = `panel-${index}`;
+                    const isHidden = this._selectedTab !== panelName;
+                    console.log(`Panel ${panelName}: selected=${this._selectedTab}, hidden=${isHidden}`);
+                    return html`
+                        <div class="tab-panel" ?hidden=${isHidden}>
+                            ${tab.content.map(item => {
+                                if (item.type === "Section") {
+                                    return this.generateSection(item);
+                                } else {
+                                    return this.generateRow(item);
+                                }
+                            })}
+                        </div>
+                    `;
+                })}
             </div>
         `;
     }
