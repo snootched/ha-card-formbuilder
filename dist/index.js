@@ -43,8 +43,14 @@ class EditorForm extends lit_1.LitElement {
         }
     }
     _handleTabActivated(event) {
-        console.log('Tab activated:', event.detail.name, 'Previous:', this._selectedTab);
-        this._selectedTab = event.detail.name;
+        var _a, _b;
+        console.log('Full event detail:', event.detail);
+        console.log('Event target:', event.target);
+        console.log('Event target name:', (_a = event.target) === null || _a === void 0 ? void 0 : _a.name);
+        // Try different ways to get the tab name
+        const tabName = event.detail.name || ((_b = event.target) === null || _b === void 0 ? void 0 : _b.name) || event.detail.tab;
+        console.log('Tab activated:', tabName, 'Previous:', this._selectedTab);
+        this._selectedTab = tabName;
         console.log('New selected tab:', this._selectedTab);
         this.requestUpdate();
     }
