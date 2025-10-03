@@ -46,8 +46,15 @@ export default class EditorForm extends LitElement {
     }
 
     _handleTabActivated(event) {
-        console.log('Tab activated:', event.detail.name, 'Previous:', this._selectedTab);
-        this._selectedTab = event.detail.name;
+        console.log('Full event detail:', event.detail);
+        console.log('Event target:', event.target);
+        console.log('Event target name:', event.target?.name);
+
+        // Try different ways to get the tab name
+        const tabName = event.detail.name || event.target?.name || event.detail.tab;
+
+        console.log('Tab activated:', tabName, 'Previous:', this._selectedTab);
+        this._selectedTab = tabName;
         console.log('New selected tab:', this._selectedTab);
         this.requestUpdate();
     }
