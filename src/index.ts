@@ -46,11 +46,8 @@ export default class EditorForm extends LitElement {
     }
 
     _handleTabActivated(event) {
-        // Support both old (sl) and new (ha) tab event payloads
-        // For ha-tab-group: event.detail.tab.value or event.detail.tab.panel
-        // For sl-tab-group: event.detail.name
-        const newTab = event.detail?.tab?.value || event.detail?.tab?.panel || event.detail?.name || this._selectedTab;
-        this._selectedTab = newTab;
+        // Simplified based on browser_mod implementation
+        this._selectedTab = event.detail.value;
         this.requestUpdate();
     }
 
