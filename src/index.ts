@@ -46,57 +46,51 @@ export default class EditorForm extends LitElement {
     }
 
     _handleTabActivated(event) {
-        console.log('Event fired, finding active tab...');
-
-        // Since event.detail.name is empty, we need to find the active tab manually
-        const tabGroup = event.target;
-
-        // Find the tab that was just activated (has aria-selected="true")
-        const activeTab = tabGroup.querySelector('ha-tab-group-tab[aria-selected="true"]');
-
-        if (activeTab) {
-            const panelName = activeTab.getAttribute('panel');
-            console.log('Found active tab with panel:', panelName);
-
-            if (panelName && panelName !== this._selectedTab) {
-                this._selectedTab = panelName;
-                console.log('Updated selected tab to:', this._selectedTab);
-                this.requestUpdate();
-            }
-        } else {
-            console.log('No active tab found');
-        }
+        // Support both old (sl) and new (wa) tab event payloads
+        this._selectedTab = event.detail?.name || event.detail?.panel || this._selectedTab;
+        this.requestUpdate();
     }
 
     generateTabs(tabs) {
         const visibleTabs = tabs.filter(tab => this._evaluateCondition(tab.visibilityCondition || "true"));
-        console.log('Generating tabs with event listener attached');
+        const hasNewTabs = customElements.get('ha-tab-group');
+        return hasNewTabs ? this._renderHaTabs(visibleTabs) : this._renderSlTabs(visibleTabs);
+    }
 
+    _renderSlTabs(visibleTabs) {
         return html`
-            <ha-tab-group active=${this._selectedTab} @wa-tab-show=${this._handleTabActivated}>
+            <sl-tab-group @sl-tab-show=${this._handleTabActivated}>
                 ${visibleTabs.map((tab, index) => html`
-                    <ha-tab-group-tab slot="nav" panel="panel-${index}">
+                    <sl-tab slot="nav" panel="panel-${index}" ?active=${this._selectedTab === `panel-${index}`}>
                         ${tab.label}
-                    </ha-tab-group-tab>
+                    </sl-tab>
+                `)}
+            </sl-tab-group>
+            <div class="tab-content">
+                ${visibleTabs.map((tab, index) => html`
+                    <sl-tab-panel name="panel-${index}" ?hidden=${this._selectedTab !== `panel-${index}`}>
+                        ${tab.content.map(item => item.type === "Section" ? this.generateSection(item) : this.generateRow(item))}
+                    </sl-tab-panel>
+                `)}
+            </div>
+        `;
+    }
+
+    _renderHaTabs(visibleTabs) {
+        return html`
+            <ha-tab-group @wa-tab-show=${this._handleTabActivated}>
+                ${visibleTabs.map((tab, index) => html`
+                    <ha-tab panel="panel-${index}" ?active=${this._selectedTab === `panel-${index}`}>
+                        ${tab.label}
+                    </ha-tab>
                 `)}
             </ha-tab-group>
             <div class="tab-content">
-                ${visibleTabs.map((tab, index) => {
-                    const panelName = `panel-${index}`;
-                    const isHidden = this._selectedTab !== panelName;
-                    console.log(`Panel ${panelName}: selected=${this._selectedTab}, hidden=${isHidden}`);
-                    return html`
-                        <div class="tab-panel" ?hidden=${isHidden}>
-                            ${tab.content.map(item => {
-                                if (item.type === "Section") {
-                                    return this.generateSection(item);
-                                } else {
-                                    return this.generateRow(item);
-                                }
-                            })}
-                        </div>
-                    `;
-                })}
+                ${visibleTabs.map((tab, index) => html`
+                    <ha-tab-panel name="panel-${index}" ?hidden=${this._selectedTab !== `panel-${index}`}>
+                        ${tab.content.map(item => item.type === "Section" ? this.generateSection(item) : this.generateRow(item))}
+                    </ha-tab-panel>
+                `)}
             </div>
         `;
     }
@@ -266,8 +260,13 @@ export default class EditorForm extends LitElement {
                 display: grid;
                 grid-gap: 8px;
             }
-
-             /* Styles for tabs */
+            /* Added ha-tab-group styling (mirrors previous sl-tab-group expectations) */
+            ha-tab-group {
+                border-bottom: 1px solid var(--divider-color);
+                display: block;
+            }
+            ha-tab-panel[hidden] { display: none; }
+            /* Base styles for tabs */
             mwc-tab-bar {
                 border-bottom: 1px solid var(--divider-color);
             }
