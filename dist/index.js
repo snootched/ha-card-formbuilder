@@ -43,17 +43,20 @@ class EditorForm extends lit_1.LitElement {
         }
     }
     _handleTabActivated(event) {
+        console.log('full event:', event);
         console.log('Event detail:', event.detail);
-        this._selectedTab = event.detail.name;
+        // Based on HA's implementation, it should be event.detail.panel
+        this._selectedTab = event.detail.panel || event.detail.name || event.detail.tab;
+        console.log('Selected tab set to:', this._selectedTab);
         this.requestUpdate();
     }
     generateTabs(tabs) {
         const visibleTabs = tabs.filter(tab => this._evaluateCondition(tab.visibilityCondition || "true"));
         console.log('Generating tabs with event listener attached');
         return (0, lit_1.html) `
-            <ha-tab-group @wa-tab-show=${this._handleTabActivated}>
+            <ha-tab-group active=${this._selectedTab} @wa-tab-show=${this._handleTabActivated}>
                 ${visibleTabs.map((tab, index) => (0, lit_1.html) `
-                    <ha-tab-group-tab slot="nav" name="panel-${index}">
+                    <ha-tab-group-tab slot="nav" panel="panel-${index}">
                         ${tab.label}
                     </ha-tab-group-tab>
                 `)}
