@@ -51,14 +51,14 @@ class EditorForm extends lit_1.LitElement {
         return (0, lit_1.html) `
             <ha-tab-group @wa-tab-show=${this._handleTabActivated}>
                 ${visibleTabs.map((tab, index) => (0, lit_1.html) `
-                    <ha-tab slot="nav" name="panel-${index}" ?active=${this._selectedTab === `panel-${index}`}>
+                    <ha-tab-group-tab slot="nav" name="panel-${index}" ?active=${this._selectedTab === `panel-${index}`}>
                         ${tab.label}
-                    </ha-tab>
+                    </ha-tab-group-tab>
                 `)}
             </ha-tab-group>
             <div class="tab-content">
                 ${visibleTabs.map((tab, index) => (0, lit_1.html) `
-                    <ha-tab-panel name="panel-${index}" ?hidden=${this._selectedTab !== `panel-${index}`}>
+                    <div class="tab-panel" ?hidden=${this._selectedTab !== `panel-${index}`}>
                         ${tab.content.map(item => {
             if (item.type === "Section") {
                 return this.generateSection(item);
@@ -67,7 +67,7 @@ class EditorForm extends lit_1.LitElement {
                 return this.generateRow(item);
             }
         })}
-                    </ha-tab-panel>
+                    </div>
                 `)}
             </div>
         `;
