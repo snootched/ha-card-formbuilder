@@ -43,12 +43,8 @@ class EditorForm extends lit_1.LitElement {
         }
     }
     _handleTabActivated(event) {
-        var _a, _b, _c, _d, _e;
-        // Support both old (sl) and new (ha) tab event payloads
-        // For ha-tab-group: event.detail.tab.value or event.detail.tab.panel
-        // For sl-tab-group: event.detail.name
-        const newTab = ((_b = (_a = event.detail) === null || _a === void 0 ? void 0 : _a.tab) === null || _b === void 0 ? void 0 : _b.value) || ((_d = (_c = event.detail) === null || _c === void 0 ? void 0 : _c.tab) === null || _d === void 0 ? void 0 : _d.panel) || ((_e = event.detail) === null || _e === void 0 ? void 0 : _e.name) || this._selectedTab;
-        this._selectedTab = newTab;
+        // Simplified based on browser_mod implementation
+        this._selectedTab = event.detail.value;
         this.requestUpdate();
     }
     generateTabs(tabs) {
