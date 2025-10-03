@@ -46,8 +46,11 @@ export default class EditorForm extends LitElement {
     }
 
     _handleTabActivated(event) {
+        console.log('full event:', event);
         console.log('Event detail:', event.detail);
-        this._selectedTab = event.detail.name;
+        // Based on HA's implementation, it should be event.detail.panel
+        this._selectedTab = event.detail.panel || event.detail.name || event.detail.tab;
+        console.log('Selected tab set to:', this._selectedTab);
         this.requestUpdate();
     }
 
@@ -56,9 +59,9 @@ export default class EditorForm extends LitElement {
         console.log('Generating tabs with event listener attached');
 
         return html`
-            <ha-tab-group @wa-tab-show=${this._handleTabActivated}>
+            <ha-tab-group active=${this._selectedTab} @wa-tab-show=${this._handleTabActivated}>
                 ${visibleTabs.map((tab, index) => html`
-                    <ha-tab-group-tab slot="nav" name="panel-${index}">
+                    <ha-tab-group-tab slot="nav" panel="panel-${index}">
                         ${tab.label}
                     </ha-tab-group-tab>
                 `)}
