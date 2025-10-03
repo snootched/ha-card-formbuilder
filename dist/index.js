@@ -43,12 +43,23 @@ class EditorForm extends lit_1.LitElement {
         }
     }
     _handleTabActivated(event) {
-        console.log('full event:', event);
-        console.log('Event detail:', event.detail);
-        // Based on HA's implementation, it should be event.detail.panel
-        this._selectedTab = event.detail.panel || event.detail.name || event.detail.tab;
-        console.log('Selected tab set to:', this._selectedTab);
-        this.requestUpdate();
+        console.log('Event fired, finding active tab...');
+        // Since event.detail.name is empty, we need to find the active tab manually
+        const tabGroup = event.target;
+        // Find the tab that was just activated (has aria-selected="true")
+        const activeTab = tabGroup.querySelector('ha-tab-group-tab[aria-selected="true"]');
+        if (activeTab) {
+            const panelName = activeTab.getAttribute('panel');
+            console.log('Found active tab with panel:', panelName);
+            if (panelName && panelName !== this._selectedTab) {
+                this._selectedTab = panelName;
+                console.log('Updated selected tab to:', this._selectedTab);
+                this.requestUpdate();
+            }
+        }
+        else {
+            console.log('No active tab found');
+        }
     }
     generateTabs(tabs) {
         const visibleTabs = tabs.filter(tab => this._evaluateCondition(tab.visibilityCondition || "true"));
