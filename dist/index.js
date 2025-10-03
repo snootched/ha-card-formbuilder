@@ -51,7 +51,7 @@ class EditorForm extends lit_1.LitElement {
         return (0, lit_1.html) `
             <ha-tab-group @wa-tab-show=${this._handleTabActivated}>
                 ${visibleTabs.map((tab, index) => (0, lit_1.html) `
-                    <ha-tab slot="nav" panel="panel-${index}" ?active=${this._selectedTab === `panel-${index}`}>
+                    <ha-tab slot="nav" name="panel-${index}" ?active=${this._selectedTab === `panel-${index}`}>
                         ${tab.label}
                     </ha-tab>
                 `)}
