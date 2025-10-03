@@ -43,14 +43,17 @@ class EditorForm extends lit_1.LitElement {
         }
     }
     _handleTabActivated(event) {
-        var _a, _b;
-        // Support both old (sl) and new (wa) tab event payloads
-        this._selectedTab = ((_a = event.detail) === null || _a === void 0 ? void 0 : _a.name) || ((_b = event.detail) === null || _b === void 0 ? void 0 : _b.panel) || this._selectedTab;
+        var _a, _b, _c, _d, _e;
+        // Support both old (sl) and new (ha) tab event payloads
+        // For ha-tab-group: event.detail.tab.value or event.detail.tab.panel
+        // For sl-tab-group: event.detail.name
+        const newTab = ((_b = (_a = event.detail) === null || _a === void 0 ? void 0 : _a.tab) === null || _b === void 0 ? void 0 : _b.value) || ((_d = (_c = event.detail) === null || _c === void 0 ? void 0 : _c.tab) === null || _d === void 0 ? void 0 : _d.panel) || ((_e = event.detail) === null || _e === void 0 ? void 0 : _e.name) || this._selectedTab;
+        this._selectedTab = newTab;
         this.requestUpdate();
     }
     generateTabs(tabs) {
         const visibleTabs = tabs.filter(tab => this._evaluateCondition(tab.visibilityCondition || "true"));
-        const hasNewTabs = customElements.get('ha-tab-group');
+        const hasNewTabs = customElements.get('ha-tab-group-tab');
         return hasNewTabs ? this._renderHaTabs(visibleTabs) : this._renderSlTabs(visibleTabs);
     }
     _renderSlTabs(visibleTabs) {
@@ -72,18 +75,22 @@ class EditorForm extends lit_1.LitElement {
         `;
     }
     _renderHaTabs(visibleTabs) {
-        // New HA 2025.10 tab structure: tabs (slot="nav") and panels live inside the same ha-tab-group
+        // New HA 2025.10 tab structure using ha-tab-group-tab instead of ha-tab
         return (0, lit_1.html) `
-            <ha-tab-group @wa-tab-show=${this._handleTabActivated}>
+            <ha-tab-group @ha-tab-selected=${this._handleTabActivated}>
                 ${visibleTabs.map((tab, index) => (0, lit_1.html) `
-                    <ha-tab slot="nav" panel="panel-${index}" ?active=${this._selectedTab === `panel-${index}`}>
+                    <ha-tab-group-tab .value=${`panel-${index}`} ?selected=${this._selectedTab === `panel-${index}`}>
                         ${tab.label}
-                    </ha-tab>
-                    <ha-tab-panel name="panel-${index}" ?hidden=${this._selectedTab !== `panel-${index}`}>
-                        ${tab.content.map(item => item.type === "Section" ? this.generateSection(item) : this.generateRow(item))}
-                    </ha-tab-panel>
+                    </ha-tab-group-tab>
                 `)}
             </ha-tab-group>
+            <div class="tab-content">
+                ${visibleTabs.map((tab, index) => (0, lit_1.html) `
+                    <div class="tab-panel" ?hidden=${this._selectedTab !== `panel-${index}`}>
+                        ${tab.content.map(item => item.type === "Section" ? this.generateSection(item) : this.generateRow(item))}
+                    </div>
+                `)}
+            </div>
         `;
     }
     generateSection(section) {
