@@ -12,8 +12,6 @@ export default class EditorForm extends LitElement {
     generateForm(cardConfigData: any): import("lit-html").TemplateResult<1>;
     _handleTabActivated(event: any): void;
     generateTabs(tabs: any): import("lit-html").TemplateResult<1>;
-    _renderSlTabs(visibleTabs: any): import("lit-html").TemplateResult<1>;
-    _renderHaTabs(visibleTabs: any): import("lit-html").TemplateResult<1>;
     generateSection(section: Section): any;
     generateRow(row: ControlRow): import("lit-html").TemplateResult<1>;
     _evaluateCondition(condition: string, context?: any): boolean;
