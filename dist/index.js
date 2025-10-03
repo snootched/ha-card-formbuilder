@@ -49,16 +49,16 @@ class EditorForm extends lit_1.LitElement {
     generateTabs(tabs) {
         const visibleTabs = tabs.filter(tab => this._evaluateCondition(tab.visibilityCondition || "true"));
         return (0, lit_1.html) `
-            <sl-tab-group @sl-tab-show=${this._handleTabActivated}>
+            <ha-tab-group @wa-tab-show=${this._handleTabActivated}>
                 ${visibleTabs.map((tab, index) => (0, lit_1.html) `
-                    <sl-tab slot="nav" panel="panel-${index}" ?active=${this._selectedTab === `panel-${index}`}>
+                    <ha-tab slot="nav" panel="panel-${index}" ?active=${this._selectedTab === `panel-${index}`}>
                         ${tab.label}
-                    </sl-tab>
+                    </ha-tab>
                 `)}
-            </sl-tab-group>
+            </ha-tab-group>
             <div class="tab-content">
                 ${visibleTabs.map((tab, index) => (0, lit_1.html) `
-                    <sl-tab-panel name="panel-${index}" ?hidden=${this._selectedTab !== `panel-${index}`}>
+                    <ha-tab-panel name="panel-${index}" ?hidden=${this._selectedTab !== `panel-${index}`}>
                         ${tab.content.map(item => {
             if (item.type === "Section") {
                 return this.generateSection(item);
@@ -67,7 +67,7 @@ class EditorForm extends lit_1.LitElement {
                 return this.generateRow(item);
             }
         })}
-                    </sl-tab-panel>
+                    </ha-tab-panel>
                 `)}
             </div>
         `;
