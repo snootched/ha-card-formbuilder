@@ -46,53 +46,34 @@ export default class EditorForm extends LitElement {
     }
 
     _handleTabActivated(event) {
-        // Simplified based on browser_mod implementation
-        this._selectedTab = event.detail.value;
+        // Match HA frontend pattern - they use event.target.value
+        this._selectedTab = event.target.value;
         this.requestUpdate();
     }
 
     generateTabs(tabs) {
         const visibleTabs = tabs.filter(tab => this._evaluateCondition(tab.visibilityCondition || "true"));
-        const hasNewTabs = customElements.get('ha-tab-group-tab');
-        return hasNewTabs ? this._renderHaTabs(visibleTabs) : this._renderSlTabs(visibleTabs);
-    }
-
-    _renderSlTabs(visibleTabs) {
         return html`
-            <sl-tab-group @sl-tab-show=${this._handleTabActivated}>
-                ${visibleTabs.map((tab, index) => html`
-                    <sl-tab slot="nav" panel="panel-${index}" ?active=${this._selectedTab === `panel-${index}`}>
-                        ${tab.label}
-                    </sl-tab>
-                `)}
-            </sl-tab-group>
-            <div class="tab-content">
-                ${visibleTabs.map((tab, index) => html`
-                    <sl-tab-panel name="panel-${index}" ?hidden=${this._selectedTab !== `panel-${index}`}>
-                        ${tab.content.map(item => item.type === "Section" ? this.generateSection(item) : this.generateRow(item))}
-                    </sl-tab-panel>
-                `)}
-            </div>
-        `;
-    }
-
-    _renderHaTabs(visibleTabs) {
-        // New HA 2025.10 tab structure using ha-tab-group-tab instead of ha-tab
-        return html`
-            <ha-tab-group @ha-tab-selected=${this._handleTabActivated}>
-                ${visibleTabs.map((tab, index) => html`
-                    <ha-tab-group-tab .value=${`panel-${index}`} ?selected=${this._selectedTab === `panel-${index}`}>
-                        ${tab.label}
-                    </ha-tab-group-tab>
-                `)}
+            <ha-tab-group @wa-tab-show=${this._handleTabActivated}>
+                ${visibleTabs.map((tab, index) => {
+                    const tabId = `panel-${index}`;
+                    return html`
+                        <ha-tab-group-tab
+                            .value=${tabId}
+                            ?selected=${this._selectedTab === tabId}>
+                            ${tab.label}
+                        </ha-tab-group-tab>
+                    `;
+                })}
+                ${visibleTabs.map((tab, index) => {
+                    const tabId = `panel-${index}`;
+                    return html`
+                        <ha-tab-panel .value=${tabId} ?hidden=${this._selectedTab !== tabId}>
+                            ${tab.content.map(item => item.type === "Section" ? this.generateSection(item) : this.generateRow(item))}
+                        </ha-tab-panel>
+                    `;
+                })}
             </ha-tab-group>
-            <div class="tab-content">
-                ${visibleTabs.map((tab, index) => html`
-                    <div class="tab-panel" ?hidden=${this._selectedTab !== `panel-${index}`}>
-                        ${tab.content.map(item => item.type === "Section" ? this.generateSection(item) : this.generateRow(item))}
-                    </div>
-                `)}
-            </div>
         `;
     }
 
@@ -261,25 +242,21 @@ export default class EditorForm extends LitElement {
                 display: grid;
                 grid-gap: 8px;
             }
-            /* Added ha-tab-group styling (mirrors previous sl-tab-group expectations) */
+
+            /* Styles for new ha-tab-group */
             ha-tab-group {
                 border-bottom: 1px solid var(--divider-color);
                 display: block;
             }
-            ha-tab-panel[hidden] { display: none; }
-            /* Base styles for tabs */
-            mwc-tab-bar {
-                border-bottom: 1px solid var(--divider-color);
-            }
-            .tab-content {
+
+            /* Styles for tab panels */
+            ha-tab-panel {
                 padding: 10px;
             }
-            .tab-panel {
+            ha-tab-panel[hidden] {
                 display: none;
             }
-            .tab-panel:not([hidden]) {
-                display: block;
-            }
+
             /* Base styles for form rows */
             .form-row {
                 display: grid;
@@ -304,7 +281,6 @@ export default class EditorForm extends LitElement {
             }
 
             /* ensure full width for form controls not in two-controls class */
-
             .form-row:not(.two-controls) .form-control > * {
                 width: -webkit-fill-available;
             }
