@@ -1,6 +1,6 @@
 {
   "name": "ha-editor-formbuilder-yaml",
-  "version": "2025.10.2",
+  "version": "2025.10.3",
   "description": "A reimplementation of ha-editor-formbuilder - supporting YAML configuration of HA Selector controls, conditional expresssions, and more.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
