@@ -43,17 +43,18 @@ class EditorForm extends lit_1.LitElement {
         }
     }
     _handleTabActivated(event) {
-        console.log('Full event detail:', event.detail);
-        console.log('Event target:', event.target);
-        // Try to find the active tab from the tab group
-        const tabGroup = event.target;
-        const activeTab = (tabGroup === null || tabGroup === void 0 ? void 0 : tabGroup.querySelector('ha-tab-group-tab[active]')) || (tabGroup === null || tabGroup === void 0 ? void 0 : tabGroup.querySelector('ha-tab-group-tab[aria-selected="true"]'));
-        const tabName = activeTab === null || activeTab === void 0 ? void 0 : activeTab.getAttribute('name');
-        console.log('Active tab element:', activeTab);
-        console.log('Tab activated:', tabName, 'Previous:', this._selectedTab);
-        this._selectedTab = tabName || this._selectedTab; // fallback to current if we can't find it
-        console.log('New selected tab:', this._selectedTab);
-        this.requestUpdate();
+        // The event fires before the tab group updates, so we need to use a timeout
+        // to let the DOM update with the new active state
+        setTimeout(() => {
+            const tabGroup = event.target;
+            const activeTab = (tabGroup === null || tabGroup === void 0 ? void 0 : tabGroup.querySelector('ha-tab-group-tab[aria-selected="true"]')) ||
+                (tabGroup === null || tabGroup === void 0 ? void 0 : tabGroup.querySelector('ha-tab-group-tab[active]'));
+            const tabName = activeTab === null || activeTab === void 0 ? void 0 : activeTab.getAttribute('name');
+            if (tabName && tabName !== this._selectedTab) {
+                this._selectedTab = tabName;
+                this.requestUpdate();
+            }
+        }, 0);
     }
     generateTabs(tabs) {
         const visibleTabs = tabs.filter(tab => this._evaluateCondition(tab.visibilityCondition || "true"));
