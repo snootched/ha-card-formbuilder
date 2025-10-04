@@ -244,8 +244,13 @@ export default class EditorForm extends LitElement {
                 width: 100%;
             }
 
-            /* Fix overflow on the body slot inside ha-tab-group */
-            ha-tab-group .body {
+            /* Try to target Shadow DOM parts */
+            ha-tab-group::part(body) {
+                overflow: visible !important;
+            }
+
+            /* Alternative: try targeting the slot */
+            ha-tab-group [part="body"] {
                 overflow: visible !important;
             }
 
