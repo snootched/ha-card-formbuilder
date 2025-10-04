@@ -6,7 +6,7 @@ import { generateControl, deepMerge } from "./controls";
 
 export default class EditorForm extends LitElement {
 
-    private _selectedTab: string = "panel-0"; // Default to first tab
+    private _selectedTab: number = 0; // Default to first tab (numeric like HA frontend)
 
     _hass: HomeAssistant;
     _config: LovelaceCardConfig;
@@ -46,8 +46,8 @@ export default class EditorForm extends LitElement {
     }
 
     _handleTabActivated(event) {
-        // Match HA frontend pattern - they use event.target.value
-        this._selectedTab = event.target.value;
+        // Match HA frontend pattern - they use parseInt on event.target.value
+        this._selectedTab = parseInt(event.target.value, 10);
         this.requestUpdate();
     }
 
@@ -55,24 +55,18 @@ export default class EditorForm extends LitElement {
         const visibleTabs = tabs.filter(tab => this._evaluateCondition(tab.visibilityCondition || "true"));
         return html`
             <ha-tab-group @wa-tab-show=${this._handleTabActivated}>
-                ${visibleTabs.map((tab, index) => {
-                    const tabId = `panel-${index}`;
-                    return html`
-                        <ha-tab-group-tab
-                            .value=${tabId}
-                            ?selected=${this._selectedTab === tabId}>
-                            ${tab.label}
-                        </ha-tab-group-tab>
-                    `;
-                })}
-                ${visibleTabs.map((tab, index) => {
-                    const tabId = `panel-${index}`;
-                    return html`
-                        <ha-tab-panel .value=${tabId} ?hidden=${this._selectedTab !== tabId}>
-                            ${tab.content.map(item => item.type === "Section" ? this.generateSection(item) : this.generateRow(item))}
-                        </ha-tab-panel>
-                    `;
-                })}
+                ${visibleTabs.map((tab, index) => html`
+                    <ha-tab-group-tab
+                        .value=${index}
+                        ?active=${this._selectedTab === index}>
+                        ${tab.label}
+                    </ha-tab-group-tab>
+                `)}
+                ${visibleTabs.map((tab, index) => html`
+                    <ha-tab-panel .value=${index} ?hidden=${this._selectedTab !== index}>
+                        ${tab.content.map(item => item.type === "Section" ? this.generateSection(item) : this.generateRow(item))}
+                    </ha-tab-panel>
+                `)}
             </ha-tab-group>
         `;
     }
