@@ -211,7 +211,11 @@ class EditorForm extends lit_1.LitElement {
                 border-bottom: 1px solid var(--divider-color);
                 display: block;
                 width: 100%;
-                overflow: visible !important; /* Override webawesome's overflow:auto */
+            }
+
+            /* Fix overflow on the body slot inside ha-tab-group */
+            ha-tab-group .body {
+                overflow: visible !important;
             }
 
             /* Styles for tab panels - fix scrollbar issues */
