@@ -237,34 +237,6 @@ export default class EditorForm extends LitElement {
                 grid-gap: 8px;
             }
 
-            /* Styles for new ha-tab-group */
-            ha-tab-group {
-                border-bottom: 1px solid var(--divider-color);
-                display: block;
-                width: 100%;
-            }
-
-            /* Try to target Shadow DOM parts */
-            ha-tab-group::part(body) {
-                overflow: visible !important;
-            }
-
-            /* Alternative: try targeting the slot */
-            ha-tab-group [part="body"] {
-                overflow: visible !important;
-            }
-
-            /* Styles for tab panels - fix scrollbar issues */
-            ha-tab-panel {
-                padding: 16px;
-                box-sizing: border-box;
-                width: 100%;
-                overflow: visible; /* Prevent unnecessary scrollbars */
-            }
-            ha-tab-panel[hidden] {
-                display: none;
-            }
-
             /* Base styles for form rows */
             .form-row {
                 display: grid;
