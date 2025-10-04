@@ -257,7 +257,7 @@ class EditorForm extends lit_1.LitElement {
             /* Styles for expandable sections */
             ha-expansion-panel {
                 margin-bottom: 10px;
-                border-radius: var(--ha-card-border-radius, 12px);
+                border-radius: var(--ha-card-border-radius, 24px);
                 width: 100%;
                 box-sizing: border-box;
             }
