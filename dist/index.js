@@ -8,7 +8,7 @@ const controls_1 = require("./controls");
 class EditorForm extends lit_1.LitElement {
     constructor() {
         super(...arguments);
-        this._selectedTab = "panel-0"; // Default to first tab
+        this._selectedTab = 0; // Default to first tab (numeric like HA frontend)
         this._userStyles = (0, lit_1.css) ``;
         this._mergeUserStyles = true;
     }
@@ -43,32 +43,26 @@ class EditorForm extends lit_1.LitElement {
         }
     }
     _handleTabActivated(event) {
-        // Match HA frontend pattern - they use event.target.value
-        this._selectedTab = event.target.value;
+        // Match HA frontend pattern - they use parseInt on event.target.value
+        this._selectedTab = parseInt(event.target.value, 10);
         this.requestUpdate();
     }
     generateTabs(tabs) {
         const visibleTabs = tabs.filter(tab => this._evaluateCondition(tab.visibilityCondition || "true"));
         return (0, lit_1.html) `
             <ha-tab-group @wa-tab-show=${this._handleTabActivated}>
-                ${visibleTabs.map((tab, index) => {
-            const tabId = `panel-${index}`;
-            return (0, lit_1.html) `
-                        <ha-tab-group-tab
-                            .value=${tabId}
-                            ?selected=${this._selectedTab === tabId}>
-                            ${tab.label}
-                        </ha-tab-group-tab>
-                    `;
-        })}
-                ${visibleTabs.map((tab, index) => {
-            const tabId = `panel-${index}`;
-            return (0, lit_1.html) `
-                        <ha-tab-panel .value=${tabId} ?hidden=${this._selectedTab !== tabId}>
-                            ${tab.content.map(item => item.type === "Section" ? this.generateSection(item) : this.generateRow(item))}
-                        </ha-tab-panel>
-                    `;
-        })}
+                ${visibleTabs.map((tab, index) => (0, lit_1.html) `
+                    <ha-tab-group-tab
+                        .value=${index}
+                        ?active=${this._selectedTab === index}>
+                        ${tab.label}
+                    </ha-tab-group-tab>
+                `)}
+                ${visibleTabs.map((tab, index) => (0, lit_1.html) `
+                    <ha-tab-panel .value=${index} ?hidden=${this._selectedTab !== index}>
+                        ${tab.content.map(item => item.type === "Section" ? this.generateSection(item) : this.generateRow(item))}
+                    </ha-tab-panel>
+                `)}
             </ha-tab-group>
         `;
     }
