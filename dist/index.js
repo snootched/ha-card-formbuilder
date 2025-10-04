@@ -210,11 +210,15 @@ class EditorForm extends lit_1.LitElement {
             ha-tab-group {
                 border-bottom: 1px solid var(--divider-color);
                 display: block;
+                width: 100%;
             }
 
-            /* Styles for tab panels */
+            /* Styles for tab panels - fix scrollbar issues */
             ha-tab-panel {
-                padding: 10px;
+                padding: 16px;
+                box-sizing: border-box;
+                width: 100%;
+                overflow: visible; /* Prevent unnecessary scrollbars */
             }
             ha-tab-panel[hidden] {
                 display: none;
@@ -225,47 +229,55 @@ class EditorForm extends lit_1.LitElement {
                 display: grid;
                 grid-template-columns: 1fr;
                 grid-gap: 8px;
-                /* margin-bottom: 10px; */
                 border-radius: 10px;
+                box-sizing: border-box;
+                width: 100%;
             }
 
             /* Styles for form rows with two controls */
             .form-row.two-controls {
                 grid-template-columns: 1fr 1fr;
             }
+
             /* Labels in form rows with two controls */
             .form-row.two-controls label {
-                grid-column: span 2; /* Make the label span across both columns */
-                justify-self: start; /* Left-justify the label */
+                grid-column: span 2;
+                justify-self: start;
                 font-weight: bold;
                 height: auto;
-                margin-bottom: 5px; /* Add some space below the label */
+                margin-bottom: 5px;
                 padding-left: 8px;
             }
 
-            /* ensure full width for form controls not in two-controls class */
+            /* Ensure full width for form controls not in two-controls class */
             .form-row:not(.two-controls) .form-control > * {
-                width: -webkit-fill-available;
+                width: 100%;
+                box-sizing: border-box;
             }
 
             /* Base styles for form controls */
             .form-control {
-                display: flex; /* Use flexbox for internal alignment */
+                display: flex;
                 align-items: center;
                 padding: 8px;
                 border-radius: 10px;
+                box-sizing: border-box;
+                width: 100%;
             }
 
             /* Label styles within form controls */
             .form-control label {
                 font-weight: bold;
                 padding-left: 8px;
+                flex-shrink: 0;
             }
 
             /* Styles for expandable sections */
             ha-expansion-panel {
                 margin-bottom: 10px;
-                border-radius: var(--ha-card-border-radius, 34px);
+                border-radius: var(--ha-card-border-radius, 12px);
+                width: 100%;
+                box-sizing: border-box;
             }
             ha-expansion-panel[outlined] {
                 border: 2px solid var(--chip-background-color);
@@ -273,6 +285,8 @@ class EditorForm extends lit_1.LitElement {
             ha-expansion-panel[expanded] {
                 background-color: var(--chip-background-color);
             }
+
+            /* Icon spacing in headers */
             h1 > ha-icon,
             h2 > ha-icon,
             h3 > ha-icon,
@@ -282,16 +296,21 @@ class EditorForm extends lit_1.LitElement {
                 margin: 0 8px;
             }
 
+            /* Horizontal rule styling */
             hr {
                 width: 95%;
                 border: 1px solid var(--chip-background-color);
+                margin: 16px auto;
             }
 
-            /* Styles for form errors */
+            /* Form error styling */
             .form-error {
-                color: var(--error-color); /* Home Assistant theme color */
+                color: var(--error-color);
                 font-size: 0.875em;
                 margin-top: 5px;
+                padding: 8px;
+                border-radius: 4px;
+                background-color: var(--error-color-background, rgba(244, 67, 54, 0.1));
             }
         `;
         return baseStyles;
