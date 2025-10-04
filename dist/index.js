@@ -43,8 +43,8 @@ class EditorForm extends lit_1.LitElement {
         }
     }
     _handleTabActivated(event) {
-        // Match HA frontend pattern - they use parseInt on event.target.value
-        this._selectedTab = parseInt(event.target.value, 10);
+        // Fix: event payload has event.target.activeTab.value, not event.target.value
+        this._selectedTab = parseInt(event.target.activeTab.value, 10);
         this.requestUpdate();
     }
     generateTabs(tabs) {
